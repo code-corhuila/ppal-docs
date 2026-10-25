@@ -29,6 +29,7 @@ The architecture is split across separate repositories; this is not a monorepo. 
 - [Product API contract](./03-api-and-data/product-api-contract.md)
 - [Product domain model](./03-api-and-data/product-domain-model.md)
 - [Prototype state specification](./02-code-and-ui/prototype-state-spec.md)
+- [MVP acceptance test matrix](./04-quality/mvp-acceptance-matrix.md)
 
 The operational backlog is maintained in the GitHub Project `ppal-backlog`. Its cards and priority fields must be kept synchronized with the documented backlog register.
 

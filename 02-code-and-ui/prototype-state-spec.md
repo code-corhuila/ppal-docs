@@ -4,63 +4,83 @@
 - **Owner:** Gustavo Gallego
 - **Scope basis:** ADR-002 — MVP Scope
 - **Navigation basis:** ADR-003 — Navigation Model
-- **Status:** Design specification for updating the existing Figma file; the actual Figma frames must still be created/updated and captured.
+- **Status:** Main state variants have been created as editable Figma layers. Final visual QA and Activity 1 screenshot capture are still pending.
 
 ## Purpose
 
-The existing prototype establishes the main pantry list, product form, delete-confirmation interaction, and basic connections. It should be expanded to communicate important success and failure states rather than only ideal-path screens. Reuse the existing visual language and frame structure; do not add login, camera, notification, or offline-operation screens because those are outside the accepted MVP.
+The prototype communicates both the main user flow and the most important success/failure states. It uses the existing PantryPal visual language and English UI copy. Do not add login, camera, notification, or offline-operation screens because those are outside the accepted MVP.
 
 **Figma file:** https://www.figma.com/design/ktt2ItT0fUgjI7RBmXHcdc/Design-PantryPal-UI?node-id=0-1&t=L9wdZ7Y3pFhuJE3o-1
 
-## Frames to add or update
+## Editable frame status
 
-Use the names below to make the frames easy to map to acceptance criteria. These are design states/variants, not separate routes unless specified.
+The Figma file now has a dedicated page named **MVP State Variants** (page ID `20:2`) containing these editable frames:
 
-| Priority | Frame / variant name | What it demonstrates | User-visible behavior | Related stories |
-|---|---|---|---|---|
-| Must | 01 Pantry — Loading | Initial list request is in progress | Show a spinner or restrained skeleton and “Loading pantry…”; prevent duplicate actions while initial load is unresolved | US-01, US-10 |
-| Must | 02 Pantry — Loaded | API returned products | Show product name, category, quantity/unit, expiration date when present, and status; order dated items ascending and undated items last | US-01, US-07, US-08 |
-| Should | 03 Pantry — Empty | API returned HTTP success with zero products | Show “Your pantry is empty” and an “Add product” primary action; visually distinct from an error | US-11 |
-| Must | 04 Pantry — Load Error | Initial or refresh request failed | Show a concise connection/load error and “Try again”; never display the empty state as if the request succeeded | US-10 |
-| Must | 05 Product Form — Add/Edit | Reuse one form for create and edit | Add mode has blank defaults; edit mode is prefilled from the selected product and can clear the optional expiration date | US-02, US-03 |
-| Must | 06 Product Form — Validation Error | Submit invalid field values | Show field-level errors for blank name, quantity less than or equal to zero, unsupported unit/category, invalid date, or integer-only quantity violations; focus the first invalid field | US-09 |
-| Must | 07 Product Form — Saving | POST/PUT is in progress | Show “Saving…” on the primary action and prevent duplicate submission while retaining entered values | US-02, US-03 |
-| Must | 08 Product Form — Save Failed | Create/update API request failed | Keep entered values, explain that the product was not saved, and let the user retry; do not show success or navigate away | US-10 |
-| Must | 09 Delete — Confirm | User tapped Delete for a selected product | Confirmation names the actual selected product (dynamic placeholder {productName}), with Cancel and Delete actions; Cancel makes no change | US-04 |
-| Must | 10 Delete — Failed | DELETE request failed | Keep the product visible and show an actionable error/retry path; never remove it optimistically | US-04, US-10 |
-| Should | 11 Pantry — Search No Results | Optional name search has no matches | Show “No products found” and a “Clear search” action; preserve distinction from a pantry with zero records | US-05, US-12 |
+| Priority | Frame in Figma | Node ID | Coverage |
+|---|---|---|---|
+| Must | `01 Pantry — Loading` | `23:2` | Static loading indicator and loading message |
+| Must | `04 Pantry — Load Error` | `23:175` | Connection error with Try again action |
+| Should | `03 Pantry — Empty` | `23:88` | Empty pantry message and Add Product action |
+| Should | `11 Pantry — Search No Results` | `23:262` | Search query with no matches and Clear search action |
+| Must | `05 Product Form — Edit` | `23:349` | Prefilled form and Save Changes |
+| Must | `06 Product Form — Validation Error` | `23:418` | Field-level product-name and quantity errors |
+| Must | `07 Product Form — Saving` | `23:489` | Saving feedback and disabled-looking primary action |
+| Must | `08 Product Form — Save Failed` | `23:558` | Preserved form values and Retry Save |
+| Must | `09 Delete — Confirm` | `23:627` | Confirmation with a dynamic `{productName}` placeholder |
+| Must | `10 Delete — Failed` | `23:731` | Product remains in pantry; Try Again / Close |
 
-US-06 — Filter by expiration status is Could priority and is not part of the required prototype baseline. Do not design filters as committed MVP functionality unless the scope is explicitly changed. If the existing Figma file already shows filters, label them as optional/deferred or remove them from the promised core flow.
+The original Page 1 also contains the **PantryPal main screen** (node `2:256`, the loaded-state baseline), **PantryPal Product Form** (node `4:3`, Add mode), and **PantryPal Delete Confirmation** (node `4:97`). The loaded-state baseline was updated to remove the status-filter controls, update the reference date to October 25, 2026, correct sample product dates, and order products with dated items first and undated Rice last. The Page 1 delete-dialog text now uses `{productName}` rather than hard-coding Whole Milk.
+
+**Review note:** the Page 1 delete-confirmation frame uses a duplicate background screen inherited from the original prototype. The new Page 2 `09 Delete — Confirm` and `10 Delete — Failed` variants have updated backgrounds. Prefer those variants for the current MVP evidence; visually review or retire the older duplicate before submission.
+
+## Expected behavior and acceptance mapping
+
+| Priority | Behavior/state | User-visible behavior | Related stories |
+|---|---|---|---|
+| Must | Pantry — Loading | Show a static loading indicator and “Loading products…” while the request is pending | US-01, US-10 |
+| Must | Pantry — Loaded | Show product name, category, quantity/unit, expiration date when present, and status; dated products ascend by expiration date; undated items are last | US-01, US-07, US-08 |
+| Should | Pantry — Empty | Only a successful empty API response should produce “Your pantry is empty” and an Add Product action | US-01, US-11 |
+| Must | Pantry — Load Error | Show a concise connection/load error and “Try again”; do not pretend the pantry is empty | US-10 |
+| Must | Product Form — Add/Edit | Reuse a form layout; edit mode is prefilled and allows clearing the optional date | US-02, US-03 |
+| Must | Product Form — Validation Error | Show field errors for blank name and invalid quantity; implementation must also validate unit, category, date, and integer-only quantities | US-09 |
+| Must | Product Form — Saving | Show “Saving…” and prevent duplicate submission during the request | US-02, US-03 |
+| Must | Product Form — Save Failed | Preserve entered values and allow retry; do not show success or navigate away | US-10 |
+| Must | Delete — Confirm | Name the selected product dynamically as `{productName}`; Cancel makes no change | US-04 |
+| Must | Delete — Failed | Keep the product visible after failed DELETE; offer retry/close feedback | US-04, US-10 |
+| Should | Pantry — Search No Results | Show “No products found” and Clear search; distinguish from an empty pantry | US-05, US-12 |
+
+US-06 — Filter by expiration status remains **Could** priority. The filter controls were removed from the primary loaded-state screen; do not reintroduce them as committed MVP functionality unless the scope changes explicitly.
 
 ## Transition and behavior rules
 
-- App start → Pantry — Loading → either Pantry — Loaded, Pantry — Empty, or Pantry — Load Error.
-- “Add product” opens the form in Add mode. “Edit” opens the same form in Edit mode, populated from the API-loaded item.
-- Client validation errors appear without sending the request. API errors appear after request failure and preserve the form values.
-- A successful create/update returns to the pantry list and shows a brief success message only after the API confirms success.
-- “Delete” opens the confirmation alert for the selected product. Cancel closes the alert. Confirmed API success removes the row; API failure keeps it visible and displays Delete — Failed.
-- Search and its no-results state are Should priority. Do not include a status-filter control until US-06 is promoted through scope review.
-- The date status uses calendar dates in America/Bogota: expired before today; expiring soon today through the next three calendar days inclusive; not expiring soon after that; no expiration date when absent.
+- App start → Pantry — Loading → Pantry — Loaded, Pantry — Empty, or Pantry — Load Error.
+- Add opens the form in Add mode; Edit opens the same form in Edit mode with the selected product prefilled.
+- Client validation errors appear without a request. API errors after a failed request preserve form values.
+- A successful create/update returns to the pantry list only after API confirmation.
+- Delete opens a confirmation for the selected product. Cancel changes nothing. Successful API deletion removes the row; failure keeps it visible.
+- Search and no-results feedback are Should priority. There is no status-filter control in the accepted MVP baseline.
+- Expiration status compares calendar dates in `America/Bogota`: Expired before today; Expiring Soon from today through today + 3 days inclusive; Not Expiring Soon after that; No Expiration Date if absent.
 
-## Visual and accessibility checklist
+## Visual review checklist
 
-- Keep English UI copy consistent across all states.
-- Use an actual product name in delete confirmation, not a hardcoded “Whole Milk”.
-- Ensure loading, empty, no-results, and error states look distinct.
-- Give retry and primary actions clear labels; touch targets should meet the project's mobile accessibility guidance.
-- Maintain readable contrast and do not rely on color alone to communicate expiration status.
-- Keep the same form component/layout between add and edit variants; differentiate by title and populated values.
-- Avoid mock interactions that imply persistence. The prototype illustrates intended UX; it is not an implemented API.
+The following must be checked manually in Figma before screenshot capture:
+
+- [ ] State messages, labels, buttons, and field errors are not clipped or overlapping.
+- [ ] The Page 2 frames retain the visual style of the Page 1 baseline.
+- [ ] Retry and primary actions have clear labels and readable contrast.
+- [ ] Expiration status is not conveyed by color alone.
+- [ ] The older Page 1 delete-confirmation background copy is retired or its deferred filter controls are removed.
+- [ ] The delete placeholder `{productName}` is understood as a prototype placeholder to be bound to the actual selected name in implementation.
 
 ## Capture checklist for Activity 1
 
-When the Figma file is updated, capture at least:
-1. Loaded pantry/product list.
-2. Add/edit form.
+After the visual review, capture at least:
+1. Pantry loaded/list.
+2. Add product form and edit form.
 3. Delete confirmation.
 4. Empty pantry.
 5. Load/API error with retry.
 6. Form validation and save failure.
-7. Search no-results state, clearly marked Should priority.
+7. Search no-results state, labeled **Should** priority.
 
-Include the frame name and related story/priority in the screenshot caption or nearby annotation. The screenshots and prototype still need to be added to the Activity 1 submission material if the course deliverable expects evidence of those states.
+Caption each screenshot with the Figma frame name and the linked story/priority. The frames illustrate intended UX only; they do not establish that API or mobile functionality has been implemented.

@@ -5,11 +5,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [SemVer](http
 
 ### Added
 - PantryPal ADR-002 MVP scope decision and realistic MoSCoW backlog priorities.
-- Project-specific ADR-001 for Ionic + Angular Signals state management and ADR-003 for centralized Angular Router + Ionic navigation.
+- Refined existing ADR-001 to specify Ionic + Angular Signals state management, and added ADR-003 for centralized Angular Router + Ionic navigation.
 - Product domain model, REST API contract, prototype state specification, and planned MVP acceptance test matrix.
 
 ### Changed
 - Aligned governance, architecture, networking, authentication, offline behavior, and testing guidance with the no-auth, online-only MVP.
+- Added the twelve prioritized GitHub issues to `ppal-backlog`; a dedicated Priority single-select field remains a recommended board improvement.
 - Updated repository overview and documentation indexes to keep MVP traceability discoverable.
 
 ## [1.0.0] - 2026-08-28

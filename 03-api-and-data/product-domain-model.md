@@ -11,12 +11,30 @@
 | `name` | String | Yes | Trim whitespace; must not be blank |
 | `quantity` | Number | Yes | Must be greater than zero; integer for Units and Packages, decimal allowed for weight/volume |
 | `unit` | Enum | Yes | `unit`, `g`, `kg`, `ml`, `L`, or `package` |
-| `category` | Enum | Yes | Produce, Dairy, Pantry Staples, Canned Goods, Bakery, Meat & Eggs, Snacks & Other |
+| `category` | Enum | Yes | `produce`, `dairy`, `pantry_staples`, `canned_goods`, `bakery`, `meat_eggs`, or `snacks_other` |
 | `expirationDate` | Calendar date (`YYYY-MM-DD`) or null | No | Optional; valid calendar date; past dates are allowed |
 | `createdAt` | ISO 8601 timestamp | Server-managed | Set when created; clients do not submit it |
 | `updatedAt` | ISO 8601 timestamp | Server-managed | Set on create/update; clients do not submit it |
 
-The exact enum wire values must be agreed between app and API when implementing the contract. The labels above are the product vocabulary. Do not silently accept arbitrary units/categories or perform unit conversion.
+Wire values are fixed, lowercase machine-readable keys as shown above (except unit symbol `L`, which is uppercase). The UI may display friendly labels and must map them to these wire values. Do not silently accept arbitrary units/categories or perform unit conversion.
+
+### Display labels
+
+| Wire value | Display label |
+|---|---|
+| `unit` | Units |
+| `g` | Grams (g) |
+| `kg` | Kilograms (kg) |
+| `ml` | Milliliters (ml) |
+| `L` | Liters (L) |
+| `package` | Packages |
+| `produce` | Produce |
+| `dairy` | Dairy |
+| `pantry_staples` | Pantry Staples |
+| `canned_goods` | Canned Goods |
+| `bakery` | Bakery |
+| `meat_eggs` | Meat & Eggs |
+| `snacks_other` | Snacks & Other |
 
 ## Expiration status (derived, not persisted)
 

@@ -25,11 +25,11 @@ The instructor authorized an individually developed project and advised recordin
 
 **We decided:** define PantryPal's MVP as a single demonstration pantry focused on product inventory and expiration handling, with no user accounts or login.
 
-### Included in the MVP
+### Included in the MVP — Must priority
 
-The Must-have backlog consists of:
+The Must-have backlog consists of eight stories:
 
-- **US-01 — View all pantry products:** load and display products from the REST API, sort dated products by expiration date, place undated products last, and distinguish a successful empty response from a connection failure.
+- **US-01 — View all pantry products:** load and display products from the REST API and distinguish a successful empty response from a connection failure.
 - **US-02 — Add a product:** create a product after validating its fields and show success only after the API confirms the operation.
 - **US-03 — Edit a product:** edit an existing record, including setting, changing, or clearing the optional expiration date.
 - **US-04 — Delete a product:** ask for confirmation and remove it from the list only after the API confirms deletion.
@@ -37,15 +37,20 @@ The Must-have backlog consists of:
 - **US-08 — Sort by expiration date:** apply ascending date order, with products without an expiration date last.
 - **US-09 — Validate product data:** require a nonblank name, quantity greater than zero, allowed category and unit, appropriate integer/decimal rules, and a valid optional date. The API independently validates incoming data.
 - **US-10 — Handle API failures:** provide clear connection/operation errors and retry behavior; do not report success before server confirmation.
-- **US-11 — Display the empty pantry state:** show the empty-state message and an Add Product action only when the API successfully returns no products.
+
+### Lower-priority stories
+
+- **Should — US-05 — Search by product name:** useful convenience, but not required for the core inventory flow.
+- **Should — US-11 — Display the empty pantry state:** show an empty-state message and an Add Product action only when the API successfully returns no products. US-01 must still distinguish empty data from failure.
+- **Should — US-12 — Display no-results feedback:** explain when search criteria return no products; this depends on search or other criteria being available.
+- **Could — US-06 — Filter by expiration status:** add filters for All Products, Expiring Soon, Expired, and No Expiration Date only if all Must stories pass and capacity remains.
+
+The priority definitions, rationale, and recommended delivery order are recorded in [Product Backlog Priorities](../../../00-governance/product-backlog-priorities.md). The GitHub Project `ppal-backlog` must be synchronized with that register before the operational board is considered updated.
 
 The MVP has one demonstration pantry. Product records are independent, so repeated names are allowed. Product fields are `id`, `name`, `quantity`, `unit`, optional `expirationDate`, `category`, `createdAt`, and `updatedAt`. The API is the source of truth; the mobile app does not connect directly to PostgreSQL.
 
 ### Not included in the MVP
 
-- **US-05 — Search by product name:** Should priority, to be considered after the core inventory flow.
-- **US-06 — Filter by expiration status:** Should priority, to be considered after the core inventory flow.
-- **US-12 — Display the no-results state for search/filter criteria:** Should priority, accompanying the optional search and filter behavior.
 - Account registration, login, logout, and authentication features (including advanced authentication).
 - Multiple user accounts, multiple pantries, household sharing, and account-specific inventory.
 - Camera access, product photos, local notifications, push notifications, and automatic reminders.
@@ -59,9 +64,11 @@ These exclusions keep the initial delivery small and testable. They may be recon
 
 ## Justification
 
-The chosen scope concentrates on the problem's central value: recording pantry products and making expiration information reliable and visible. CRUD, validation, expiration rules, ordering, and error handling form a complete vertical slice across the mobile client, API, and database. The selected Must stories have observable acceptance criteria and can be verified with unit, API-integration, and UI/end-to-end tests.
+The chosen scope concentrates on the problem's central value: recording pantry products and making expiration information reliable and visible. CRUD, validation, expiration rules, ordering, and API-failure handling form a complete vertical slice across the mobile client, API, and database. The eight Must stories have observable acceptance criteria and must be verified with suitable unit, API-integration, and UI/end-to-end tests.
 
-Search and filters improve convenience but are not required for the first minimal inventory workflow; therefore, they are Should rather than Must. Authentication, camera, and notifications add security, platform-permission, data-lifecycle, and testing requirements that are disproportionate to the initial demonstration scope.
+Search, filtering, the empty-pantry call-to-action, and no-results feedback improve convenience but are not all release blockers. They are differentiated as Should or Could so the first increment remains feasible; US-06 is explicitly optional. Priorities should be reviewed after all Must stories meet the Definition of Done, not treated as a promise to implement every story.
+
+Authentication, camera, and notifications add security, platform-permission, data-lifecycle, and testing requirements that are disproportionate to the initial demonstration scope.
 
 Because this MVP has no authentication, the API must be used only in a controlled development or demonstration environment. It must not be exposed as a public multi-user production service or store sensitive personal data.
 
@@ -86,13 +93,13 @@ Because this MVP has no authentication, the API must be used only in a controlle
 
 **Negative / Trade-offs:**
 - The MVP does not provide user-specific data isolation; it is suitable only for a controlled demonstration environment.
-- Search, filtering, and no-results feedback are not part of the initial Must scope.
+- Search and a friendly empty/no-results experience are lower priority; expiration-status filtering is optional.
 - Users will not receive native reminders, take product photos, or use the pantry offline.
 
 **Impact on the system:**
-- Affected features/screens: product list, add/edit form, delete confirmation, expiration-status presentation, loading/empty/error states.
+- Affected features/screens: product list, add/edit form, delete confirmation, expiration-status presentation, loading/error states, and optional empty/search/no-results states.
 - Affected repositories: `ppal-docs`, `ppal-app`, `ppal-api`, `ppal-db`, and `ppal-infra`.
-- Documents to update: product backlog, architecture overview, API contract, product data model, Figma screen descriptions, and test strategy.
+- Documents to update: product backlog and Project board, architecture overview, API contract, product data model, Figma screen descriptions, and test strategy.
 - Related ADRs: ADR-001 — State management pattern; ADR-003 — Navigation model (to be recorded separately).
 
 ## References

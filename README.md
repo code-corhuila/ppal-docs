@@ -1,112 +1,62 @@
 # PantryPal (ppal)
 
-A hybrid mobile application for managing household pantry items, tracking expiration dates, and reducing food waste.
+PantryPal is a hybrid mobile application focused on a single demonstration pantry, product inventory, expiration dates, and reducing food waste. The accepted MVP is intentionally small: no user accounts, no login, and online-only operations.
 
-> ### 📌 Política de ramas de este repositorio
-> Este repositorio de documentación trabaja con **una sola rama: `main`**. Todo cambio entra por
-> **pull request** desde una rama de trabajo (`docs/<tema>`), que se borra sola al fusionar. `main`
-> no admite commits directos, force-push ni borrado, y el PR necesita la aprobación del docente.
+## Repository workflow
 
-## Repositorios del proyecto
+This documentation repository uses `main` as its only long-lived branch. Submit changes through a working branch named `docs/<topic>` and a pull request. Do not commit directly to `main), force-push to it, or delete it. The instructor's approval is required before a PR is merged.
 
-| Repositorio | Rol |
+## Project repositories
+
+| Repository | Role | MVP status |
+|---|---|---|
+| [`ppal-docs`](https://github.com/code-corhuila/ppal-docs) | Project governance and source of truth for scope, architecture, and contracts | In use |
+| [`ppal-app`](https://github.com/code-corhuila/ppal-app) | Ionic + Angular + Capacitor mobile client | MVP target; currently an initial scaffold |
+| [`ppal-api`](https://github.com/code-corhuila/ppal-api) | Single REST API and business/data access boundary | MVP target |
+| [`ppal-db`](https://github.com/code-corhuila/ppal-db) | PostgreSQL schema and migrations | MVP target |
+| [`ppal-infra`](https://github.com/code-corhuila/ppal-infra) | Infrastructure/orchestration configuration | MVP target |
+| [`ppal-portal`](https://github.com/code-corhuila/ppal-portal) | Optional web portal | Not in the MVP |
+| [`ppal-tools`](https://github.com/code-corhuila/ppal-tools) | Shared development tooling | Supporting repository |
+
+The architecture is split across separate repositories; this is not a monorepo. The mobile app must access PostgreSQL only through the REST API.
+
+## Project decision records and scope
+
+- [ADR-001 — State management pattern](./01-architecture/decisions/records/ADR-001-state-management-pattern.md)
+- [ADR-002 — MVP scope](./01-architecture/decisions/records/ADR-002-mvp-scope.md)
+- [ADR-003 — Navigation model](./01-architecture/decisions/records/ADR-003-navigation-model.md)
+- [Product backlog priorities](./00-governance/product-backlog-priorities.md)
+- [Product API contract](./03-api-and-data/product-api-contract.md)
+- [Product domain model](./03-api-and-data/product-domain-model.md)
+- [Prototype state specification](./02-code-and-ui/prototype-state-spec.md)
+
+The operational backlog is maintained in the GitHub Project `ppal-backlog`. Its cards and priority fields must be kept synchronized with the documented backlog register.
+
+---
+
+## Mobile Governance Framework
+
+This repository contains a project-adapted documentation framework inspired by the [Mobile Governance Framework](https://github.com/jesusarielgb-works/mobile-governance-framework) by [Jesus Ariel Gonzalez Bonilla](https://github.com/jesusarielgb-works). The original framework and templates are adapted here to PantryPal's actual technology stack and accepted MVP scope.
+
+## Documentation sections
+
+| Section | Contents |
 |---|---|
-| [`ppal-docs`](https://github.com/code-corhuila/ppal-docs) | Gobierno único del proyecto (este repositorio) |
-| [`ppal-api`](https://github.com/code-corhuila/ppal-api) | Core de negocio (API) |
-| [`ppal-app`](https://github.com/code-corhuila/ppal-app) | Aplicación móvil |
-| [`ppal-portal`](https://github.com/code-corhuila/ppal-portal) | Portal web |
-| [`ppal-db`](https://github.com/code-corhuila/ppal-db) | Migraciones de base de datos |
-| [`ppal-infra`](https://github.com/code-corhuila/ppal-infra) | Infraestructura y orquestación |
-| [`ppal-tools`](https://github.com/code-corhuila/ppal-tools) | Paquete de herramientas |
+| [00 — Governance](./00-governance/) | Agile conventions, backlog priorities, ready/done definitions, Git and security rules |
+| [01 — Architecture](./01-architecture/) | Project structure, layers, state management, navigation, ADRs |
+| [02 — Code & UI](./02-code-and-ui/) | Coding standards, design system, accessibility, localization, prototype state specification |
+| [03 — API & Data](./03-api-and-data/) | Product API contract, domain model, networking, online-only behavior |
+| [04 — Quality](./04-quality/) | Testing strategy, performance budgets, mobile security |
+| [05 — Release](./05-release/) | CI/CD, signing, stores, observability |
 
-Backlog: GitHub Project `ppal-backlog`.
+## How to contribute
 
----
-
-## Manual de documentación — Mobile Governance Framework
-
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![jesusarielgb-works](https://img.shields.io/badge/org-jesusarielgb--works-blue)](https://github.com/jesusarielgb-works)
-
-> Documentation manual and governance scaffold for **mobile applications** — stack-agnostic
-> (Flutter, React Native, native iOS, native Android). A lighter companion to the
-> microservices framework: the same manual-with-templates approach, fewer sections.
-
-**Author:** [Jesus Ariel Gonzalez Bonilla](https://github.com/jesusarielgb-works)
-
-This repository is a **documentation scaffold** for any mobile project. It contains no
-project-specific information. Its purpose is to teach how to govern and document a mobile
-app professionally — showing what goes in each section, why it matters, and how the
-sections relate.
-
----
-
-## How to use this framework
-
-1. **Fork** (or copy the structure) into your project repository.
-2. **Read** [`00-sdd-guide.md`](./00-sdd-guide.md) for the fill-in order and methodology.
-3. **Read each section `README.md`** before filling in its documents — they explain what is expected.
-4. **Copy the `_template-*` files** when you need to document a concrete feature, screen,
-   decision, endpoint, entity, test case, or release. Fill in, rename, keep the original template.
-5. **Adapt every neutral rule** to your concrete stack (Flutter / React Native / native).
-6. Once a document is complete, remove the instruction blocks.
-
----
-
-## Build flow — section dependencies
-
-> `00-governance` wraps the entire project and applies to every section.
-
-```mermaid
-graph TD
-    subgraph PROCESS["🔵 PROCESS"]
-        G0["00-governance\nagile · git · DoR/DoD · security rules"]
-    end
-
-    subgraph DESIGN["🟢 DESIGN"]
-        A1["01-architecture\nstructure · layers · state · navigation · ADRs"]
-        A2["02-code-and-ui\ncoding standards · design system · a11y · i18n"]
-    end
-
-    subgraph RULES["🟣 RULES"]
-        A3["03-api-and-data\nnetworking · auth · persistence · offline"]
-    end
-
-    subgraph DELIVERY["🟠 DELIVERY"]
-        A4["04-quality\ntesting · performance · security"]
-        A5["05-release\nCI/CD · signing · stores · observability"]
-    end
-
-    G0 --> A1 --> A2 --> A3 --> A4 --> A5
-```
-
----
-
-## Sections
-
-| # | Section | Content |
-|---|---------|---------|
-| [00](./00-governance/) | Governance | Agile process, git conventions, DoR/DoD, security rules |
-| [01](./01-architecture/) | Architecture | Project structure, layers, state, navigation, ADRs |
-| [02](./02-code-and-ui/) | Code & UI | Coding standards, design system, accessibility, i18n |
-| [03](./03-api-and-data/) | API & Data | Networking, auth, persistence, offline & sync |
-| [04](./04-quality/) | Quality | Testing strategy, performance budgets, mobile security |
-| [05](./05-release/) | Release | CI/CD, signing, store distribution, observability |
-
-Companions:
-[monolith-governance-framework](https://github.com/jesusarielgb-works/monolith-governance-framework) ·
-[microservices-governance-framework](https://github.com/jesusarielgb-works/microservices-governance-framework)
-
----
-
-## How to Cite
-
-> Gonzalez Bonilla, J. A. (2026). *Mobile Governance Framework* (v1.0.0). jesusarielgb-works. https://github.com/jesusarielgb-works/mobile-governance-framework
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+1. Read the relevant section README and project decision records.
+2. Create a topic branch from `main`.
+3. Use a Conventional Commit message and submit a PR.
+4. Keep implementation claims factual: a specification or prototype is not an implemented feature.
+5. Do not merge the documentation PR until the required review and approval are complete.
 
 ## License
 
-MIT — Jesus Ariel Gonzalez Bonilla. See [LICENSE](LICENSE).
+MIT. See [LICENSE](./LICENSE).

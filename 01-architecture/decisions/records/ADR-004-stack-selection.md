@@ -30,18 +30,18 @@ This proposal becomes **Accepted** after the local `package.json` versions and t
 
 ### Weighted decision matrix
 
-Score each alternative from 1 (poor fit) to 5 (excellent fit). Weighted score = weight × score. The criteria are weighted for this project's requirements, not claimed as a universal ranking of the frameworks.
+This matrix carries forward the project-specific assessment already submitted in Activity 1 (PantryPal Technical Design, Section 2.2). The weights reflect PantryPal's course stack, short implementation window, and need for integrated routing/forms/dependency injection; the scores are not a universal ranking.
 
 | Criterion | Weight | Angular | React | Vue |
 |---|---:|---:|---:|---:|
-| Ionic integration and mobile component fit | 5 | 5 (25) | 4 (20) | 4 (20) |
-| Built-in structure for routing, dependency injection, forms, and HTTP | 4 | 5 (20) | 3 (12) | 4 (16) |
-| TypeScript conventions and maintainability across feature layers | 3 | 5 (15) | 4 (12) | 4 (12) |
-| Test seams and substitution of data/repository dependencies | 3 | 5 (15) | 3 (9) | 3 (9) |
-| Delivery speed for this existing project scaffold | 3 | 4 (12) | 3 (9) | 3 (9) |
-| **Total (maximum 90)** | **18** | **87** | **62** | **66** |
+| Alignment with the course stack | 30% | 5 (30) | 3 (18) | 3 (18) |
+| Integrated routing, guards, forms, and dependency injection | 25% | 5 (25) | 3 (15) | 3 (15) |
+| Type-safe maintainability | 20% | 5 (20) | 4 (16) | 4 (16) |
+| Fast delivery for this project | 15% | 4 (12) | 4 (12) | 5 (15) |
+| Ionic ecosystem fit | 10% | 5 (10) | 5 (10) | 5 (10) |
+| **Weighted total (maximum 100)** | **100%** | **97/100** | **71/100** | **74/100** |
 
-**Interpretation:** Angular scores highest for PantryPal because routing, dependency injection, reactive forms, and HttpClient are part of the same framework ecosystem and fit the existing Ionic + Angular scaffold. React is capable, but would require choosing and governing more separate libraries and conventions. Vue is also viable, with Vue Router and Pinia available, but switching would discard the existing scaffold and require a new integration decision. Scores are a reasoned project-specific evaluation and should be adjusted if the developer's actual experience or local implementation evidence differs.
+**Interpretation:** Angular remains the preferred option because it aligns with the course's Ionic + Angular + Capacitor stack and supplies consistent conventions for routes, dependency injection, forms, and HTTP. React remains capable, but the project would need to choose and govern more supporting libraries. Vue is also viable, but its score does not outweigh the effort of replacing the current Angular scaffold. These scores preserve the rationale documented in the Activity 1 submission and can be revisited if implementation evidence materially changes the assumptions.
 
 ### Complementary libraries and patterns
 

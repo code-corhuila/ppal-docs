@@ -99,7 +99,7 @@ Because this MVP has no authentication, the API must be used only in a controlle
 **Impact on the system:**
 - Affected features/screens: product list, add/edit form, delete confirmation, expiration-status presentation, loading/error states, and optional empty/search/no-results states.
 - Affected repositories: `ppal-docs`, `ppal-app`, `ppal-api`, `ppal-db`, and `ppal-infra`.
-- Documents covered by this decision set: product backlog priority register, architecture/state and navigation guidance, product domain model, API contract, and prototype state specification. The GitHub Project board and actual Figma frames/screenshots still require synchronization.
+- Documents covered by this decision set: product backlog priority register, architecture/state and navigation guidance, product domain model, API contract, prototype state specification, and MVP acceptance test matrix. The GitHub Project board and actual Figma frames/screenshots still require synchronization.
 - Related ADRs: ADR-001 — State management pattern and ADR-003 — Navigation model.
 
 ## References

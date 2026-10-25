@@ -25,6 +25,7 @@ The architecture is split across separate repositories; this is not a monorepo. 
 - [ADR-001 — State management pattern](./01-architecture/decisions/records/ADR-001-state-management-pattern.md)
 - [ADR-002 — MVP scope](./01-architecture/decisions/records/ADR-002-mvp-scope.md)
 - [ADR-003 — Navigation model](./01-architecture/decisions/records/ADR-003-navigation-model.md)
+- [ADR-004 — Technology stack selection](./01-architecture/decisions/records/ADR-004-stack-selection.md) (Proposed pending local version verification)
 - [Product backlog priorities](./00-governance/product-backlog-priorities.md)
 - [Product API contract](./03-api-and-data/product-api-contract.md)
 - [Product domain model](./03-api-and-data/product-domain-model.md)

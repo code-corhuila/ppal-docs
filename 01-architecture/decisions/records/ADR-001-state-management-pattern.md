@@ -1,35 +1,37 @@
-# ADR-001 — State management pattern
-
-> Example ADR shipped with the framework. Replace it with your own decision, or supersede it.
+# ADR-001 — State Management Pattern
 
 - **ID:** ADR-001
-- **Date:** 2026-08-28
+- **Date:** 2026-10-25
 - **Status:** Accepted
-- **Authors:** [team]
+- **Authors:** Gustavo Gallego
 
 ---
 
 ## Context
 
-The app needs a single, consistent way to manage UI state across features. Without a
-decided pattern, each developer picks their own, producing inconsistent, hard-to-test
-screens and mixed mental models during review.
+PantryPal is planned as an Ionic + Angular mobile app with a small, single-pantry MVP. The product list and form must represent API loading, success, empty data, validation, saving, and failure without mixing business rules into page components. This is an individual academic project with a limited schedule, so a heavyweight state-management library would add setup and learning effort without clear MVP value.
 
 **Known constraints:**
-- Team is small; the pattern must be simple to learn.
-- State must be testable without rendering UI.
-- The app targets both platforms from one codebase (stack-agnostic).
+- A single mobile client and a single REST API; the API is the source of truth.
+- No accounts, authentication, offline cache, or offline write queue in the MVP.
+- State transitions must be testable independently of rendered Ionic UI.
+- The intended stack is Ionic + Angular + Capacitor. This is an architectural decision, not a claim that product features have already been implemented.
 
 ---
 
 ## Decision
 
-**We decided:** adopt a single **unidirectional, immutable-state** pattern (MVVM-style
-state holder exposing one immutable state object per screen) for the whole app.
+**We decided:** use an MVVM-style feature facade/view-model with one immutable state snapshot per screen, exposed through Angular read-only Signals; use Angular Router and Ionic components for presentation, and keep remote HTTP request handling in the data layer.
 
-**Justification:**
-Unidirectional flow with immutable state makes transitions explicit and screens trivial to
-unit-test. Choosing one pattern app-wide removes per-feature debate and keeps reviews fast.
+Implementation rules:
+- A feature facade owns user actions and state transitions; the page/component renders state and forwards user intents.
+- Expose state as a read-only signal and replace state objects on transitions; do not mutate arrays or nested objects in place.
+- Use computed signals for derived presentation values where useful. Keep expiration-date classification and validation rules in domain functions/use cases, not in templates.
+- Use Angular HttpClient (and RxJS for request/response streams where appropriate) behind a repository/data-source boundary. RxJS is allowed for asynchronous I/O; do not introduce a second global UI-state pattern.
+- Represent loading, loaded/empty, validation, saving, and operation errors explicitly. API/network failures must not be represented as an empty list or a successful mutation.
+- Do not add NgRx or another global state library unless a later ADR justifies it.
+
+**Justification:** this keeps the state flow unidirectional, testable, and close to the existing Angular stack while avoiding unnecessary dependencies for a focused individual project.
 
 ---
 
@@ -37,27 +39,30 @@ unit-test. Choosing one pattern app-wide removes per-feature debate and keeps re
 
 | Alternative | Pros | Cons | Reason for discarding |
 |-------------|------|------|-----------------------|
-| MVVM + immutable state (chosen) | Simple, testable, framework-agnostic | Some boilerplate | — (chosen) |
-| MVI (intent/reducer) | Very explicit, great for complex flows | Heavier for simple screens | Overkill for current scope |
-| Mutable state in views | Fast to write | Untestable, inconsistent | Rejected — violates layering |
+| Feature facade / MVVM with immutable state in Angular Signals (chosen) | Small API surface, explicit state transitions, derived state support, simple unit tests | Requires discipline around immutable updates | Best fit for the small Ionic + Angular MVP |
+| NgRx global store | Mature ecosystem, powerful tooling for complex applications | Extra concepts, boilerplate, and dependencies for one small feature | Disproportionate to the current scope |
+| MVI with explicit actions and reducers | Highly explicit and predictable transitions | More ceremony for simple CRUD screens | Reconsider only if state complexity grows |
+| Mutable state directly in page components | Fast for a first mockup | Couples rendering, networking, validation, and business logic; harder to test | Rejected to preserve layer boundaries and testability |
 
 ---
 
 ## Consequences
 
 **Positive:**
-- Consistent, testable screens.
-- Faster onboarding and review.
+- Each screen's important states and transitions can be unit-tested without rendering Ionic components.
+- Page components remain focused on layout, accessibility, and forwarding user actions.
+- There is one agreed state-management approach across PantryPal features.
 
 **Negative / Trade-offs:**
-- Some boilerplate per screen.
+- A small amount of state/facade boilerplate is required.
+- Deeply nested state must be replaced immutably rather than mutated in place.
 
 **Impact on the system:**
-- Affected features/screens: all.
-- Documents to update: [`../../layers-and-state.md`](../../layers-and-state.md).
-
----
+- Affected features/screens: pantry list, add/edit product form, delete confirmation feedback, and all loading/empty/error states.
+- Documents to keep aligned: layers-and-state.md, screen specifications, and testing-strategy.md.
 
 ## References
 
-- Related to: [`../../layers-and-state.md`](../../layers-and-state.md)
+- Angular Signals documentation: https://angular.dev/guide/signals
+- Angular HTTP client documentation: https://angular.dev/guide/http
+- Related to ADR-002 — MVP Scope and ADR-003 — Navigation Model.

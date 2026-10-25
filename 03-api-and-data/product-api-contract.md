@@ -11,7 +11,7 @@ This document specifies the intended REST contract. It is not evidence that the 
 
 Base path: `/api`
 
-Product fields are defined in [Product Domain Model](./product-domain-model.md). The API is the source of truth and is the only component that reads/writes PostgreSQL. The mobile app must not connect directly to the database.
+Product fields and fixed enum values are defined in [Product Domain Model](./product-domain-model.md). The API is the source of truth and is the only component that reads/writes PostgreSQL. The mobile app must not connect directly to the database.
 
 ## Endpoints
 
@@ -35,7 +35,7 @@ Example response object (illustrative values):
   "name": "Whole Milk",
   "quantity": 1,
   "unit": "unit",
-  "category": "Dairy",
+  "category": "dairy",
   "expirationDate": "2026-10-28",
   "createdAt": "2026-10-25T15:00:00Z",
   "updatedAt": "2026-10-25T15:00:00Z"
@@ -57,12 +57,12 @@ Create/update body:
   "name": "Whole Milk",
   "quantity": 1,
   "unit": "unit",
-  "category": "Dairy",
+  "category": "dairy",
   "expirationDate": "2026-10-28"
 }
 ~~~
 
-To clear a previously set expiration date, send `"expirationDate": null`. Omit or reject unknown fields according to the server validation implementation; clients must not be allowed to set server-managed timestamps or IDs.
+To clear a previously set expiration date, send `"expirationDate": null`. For category/unit, send the exact wire values from the domain model. Omit or reject unknown fields according to the server validation implementation; clients must not be allowed to set server-managed timestamps or IDs.
 
 ## Errors
 

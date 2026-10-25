@@ -3,7 +3,7 @@
 - **Date:** 2026-10-25
 - **Owner:** Gustavo Gallego
 - **Scope basis:** [ADR-002 — Minimum Viable Product scope](../01-architecture/decisions/records/ADR-002-mvp-scope.md)
-- **Status:** All twelve issues are present in `ppal-backlog`, and the user has created a dedicated single-select project field named `Prioridad` (confirmed by screenshot, 2026-10-25). The field's row values still appear unselected in that screenshot; assign Must/Should/Could to each item before treating field-based prioritization as complete.
+- **Status:** All twelve issues are present in `ppal-backlog`, and the user has created a dedicated single-select project field named `Prioridad` (confirmed by screenshot, 2026-10-25). The user reports that its available values are Critical, High, Medium, and Low. For consistent reporting, map the project's field values as follows: Critical = Must, High = Should, Medium = Could, and Low = unused for the current twelve stories. These are board-field equivalents of the documented MoSCoW priorities, not a change to the underlying MoSCoW scope.
 
 ## Prioritization method
 
@@ -48,4 +48,4 @@ This sequence does not mean that tests or error handling should be postponed unt
 
 ## Traceability note
 
-The repository README names GitHub Project `ppal-backlog` as the operational backlog. All twelve corresponding GitHub issues are now visible in `ppal-backlog`, and their titles carry the matching Must/Should/Could value. The project also has a dedicated single-select field named `Prioridad`; as of the latest screenshot, its cells are still blank. Assign each item the matching field value. The issue order is US-01 through US-12; implementation order is separately defined above.
+The repository README names GitHub Project `ppal-backlog` as the operational backlog. All twelve corresponding GitHub issues are now visible in `ppal-backlog`, and their titles carry the matching Must/Should/Could value. The project also has a dedicated single-select field named `Prioridad`; as of the latest screenshot, its cells are still blank. Assign each item the mapped field value: Critical for Must, High for Should, and Medium for Could. Leave Low unused for this MVP backlog. The issue order is US-01 through US-12; implementation order is separately defined above.

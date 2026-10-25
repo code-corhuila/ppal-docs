@@ -1,7 +1,8 @@
 # ADR-001 — State Management Pattern
 
 - **ID:** ADR-001
-- **Date:** 2026-10-25
+- **Date:** 2026-08-28
+- **Last Updated:** 2026-10-25 (stack-specific refinement)
 - **Status:** Accepted
 - **Authors:** Gustavo Gallego
 

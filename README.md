@@ -4,7 +4,7 @@ PantryPal is a hybrid mobile application focused on a single demonstration pantr
 
 ## Repository workflow
 
-This documentation repository uses `main` as its only long-lived branch. Submit changes through a working branch named `docs/<topic>` and a pull request. Do not commit directly to `main), force-push to it, or delete it. The instructor's approval is required before a PR is merged.
+This documentation repository uses `main` as its only long-lived branch. Submit changes through a working branch named `docs/<topic>` and a pull request. Do not commit directly to `main`, force-push to it, or delete it. The instructor's approval is required before a PR is merged.
 
 ## Project repositories
 

@@ -8,7 +8,7 @@
 | Test ID | Story / priority | Level | Scenario | Expected result |
 |---|---|---|---|---|
 | TC-01 | US-01 / Must | API + UI | API returns a non-empty product array | List renders the received products; loading state ends |
-| TC-02 | US-01 / Must | API + UI | API returns HTTP 200 with an empty array | Empty state is shown; it is not shown for a failed request |
+| TC-02 | US-01 / Must | API + UI | API returns HTTP 200 with an empty array | The empty response is visibly distinct from an error; the dedicated empty message and Add Product call-to-action are verified separately in TC-20 |
 | TC-03 | US-10 / Must | UI | Initial GET fails or times out | Load error and retry action appear; app does not claim pantry is empty |
 | TC-04 | US-02 / Must | API + UI | Submit a valid product and receive 201 | New item appears after server confirmation; success feedback appears |
 | TC-05 | US-09 / Must | Unit + UI | Name is blank or whitespace-only | Client rejects submission; field-level error appears |

@@ -1,13 +1,10 @@
 # 03 — API & Data
 
-> **What is this?** The rules for how the app talks to backends (API) and how it stores and
-> syncs state locally (data).
+> Rules for how the app consumes the REST API and how data is represented. The MVP is online-only and has no user accounts or authentication.
 
 ## Why this section exists
 
-Networking and persistence are where most mobile bugs and security issues live: token
-handling, retries, offline behavior, and schema migrations. Decide the rules once and apply
-them in every feature's data layer.
+The API and data boundary must be explicit so that mobile UI, business rules, persistence, and error handling remain consistent and independently testable.
 
 ---
 
@@ -15,28 +12,30 @@ them in every feature's data layer.
 
 | File | Purpose |
 |------|---------|
-| [api-networking.md](./api-networking.md) | HTTP client, timeouts, retries, error mapping |
-| [authentication.md](./authentication.md) | Token storage, refresh, sign-out |
-| [persistence.md](./persistence.md) | Local database rules and naming |
-| [offline-sync.md](./offline-sync.md) | Offline strategy and conflict resolution |
-| [_template-endpoint-integration.md](./_template-endpoint-integration.md) | Template to document consuming one endpoint |
-| [_template-entity.md](./_template-entity.md) | Template to define a local persistence entity |
+| [product-api-contract.md](./product-api-contract.md) | MVP endpoints, request/response shapes, errors, and client behavior |
+| [product-domain-model.md](./product-domain-model.md) | Product fields, allowed values, validation, and expiration-date rules |
+| [api-networking.md](./api-networking.md) | HTTP client, bounded retries, and error mapping |
+| [authentication.md](./authentication.md) | Confirms authentication is excluded now and records future security constraints |
+| [persistence.md](./persistence.md) | Notes on local persistence; no mobile offline cache is required for the MVP |
+| [offline-sync.md](./offline-sync.md) | Online-only behavior and explicitly deferred sync strategies |
+| [_template-endpoint-integration.md](./_template-endpoint-integration.md) | Template to document consuming one backend endpoint |
+| [_template-entity.md](./_template-entity.md) | Reference template; not a declaration of local MVP storage |
 
 ---
 
-## Correlations with other sections
+## Boundaries
 
-| This section feeds... | Why |
-|-----------------------|-----|
-| `01-architecture/` | Implements repository interfaces from the domain layer |
-| `00-governance/security-rules.md` | Token/transport rules are governed there |
-| `04-quality/` | Networking and persistence need integration tests |
+- The Ionic + Angular client talks to the REST API; it does not access PostgreSQL directly.
+- The API alone validates requests and performs database reads/writes; client validation improves UX but is not a security boundary.
+- Product expiration status is calculated from the calendar date in America/Bogota and is not persisted as a separate field.
+- GET `/api/products` returning `200 []` is distinct from a network or API failure.
+- No login, accounts, local offline cache, or offline synchronization is promised in this MVP.
 
----
+## Cross-section dependencies
 
-## Questions this section must answer
+| Section | Relationship |
+|---|---|
+| `01-architecture/` | API/data implementations satisfy domain repository contracts |
+| `00-governance/security-rules.md` | Governs transport and safe handling |
+| `04-quality/` | Endpoint and validation behavior require unit/integration/UI tests |
 
-- How does the app make and retry requests?
-- Where are tokens stored and how are they refreshed?
-- What is stored locally, and how are schema changes migrated?
-- What happens when the device is offline?

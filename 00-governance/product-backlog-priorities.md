@@ -3,7 +3,7 @@
 - **Date:** 2026-10-25
 - **Owner:** Gustavo Gallego
 - **Scope basis:** [ADR-002 — Minimum Viable Product scope](../01-architecture/decisions/records/ADR-002-mvp-scope.md)
-- **Status:** The twelve issues have been added to the `ppal-backlog` Project (confirmed by user screenshot, 2026-10-25). Priority is currently encoded in issue titles; a dedicated `Priority` field and its values remain a recommended cleanup.
+- **Status:** All twelve issues are present in `ppal-backlog`, and the user has created a dedicated single-select project field named `Prioridad` (confirmed by screenshot, 2026-10-25). The field's row values still appear unselected in that screenshot; assign Must/Should/Could to each item before treating field-based prioritization as complete.
 
 ## Prioritization method
 
@@ -48,4 +48,4 @@ This sequence does not mean that tests or error handling should be postponed unt
 
 ## Traceability note
 
-The repository README names GitHub Project `ppal-backlog` as the operational backlog. All twelve corresponding GitHub issues are now visible in `ppal-backlog`, and their titles carry the matching Must/Should/Could value. The board's screenshot does not show a dedicated Priority field, so treat the title as the current visible priority source until a single-select Priority field is added and verified. The issue order is US-01 through US-12; implementation order is separately defined above.
+The repository README names GitHub Project `ppal-backlog` as the operational backlog. All twelve corresponding GitHub issues are now visible in `ppal-backlog`, and their titles carry the matching Must/Should/Could value. The project also has a dedicated single-select field named `Prioridad`; as of the latest screenshot, its cells are still blank. Assign each item the matching field value. The issue order is US-01 through US-12; implementation order is separately defined above.

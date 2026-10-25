@@ -2,7 +2,7 @@
 
 - **ID:** ADR-004
 - **Date:** 2026-10-25
-- **Status:** Proposed — awaiting verification of the local application package versions
+- **Status:** Accepted
 - **Authors:** Gustavo Gallego
 
 ---
@@ -11,7 +11,7 @@
 
 PantryPal is an individual academic project for a small hybrid mobile pantry inventory. The project needs reusable mobile UI, a clear separation between presentation/domain/data, REST API integration, predictable routing, testable forms, and a maintainable build with a limited delivery window. The current target stack is Ionic + Angular + Capacitor. The Unit 2 H2 guide requires this choice to be justified against Angular, React, and Vue using the same weighted criteria, with alternatives, consequences, and a verification step.
 
-The organization repository `code-corhuila/ppal-app` currently has no `package.json` on its default branch, so the exact installed versions must be verified from the developer's local application workspace before this ADR can be marked Accepted. Do not copy versions from the course reference app.
+The declared package version specifications were verified against the developer's local `D:\\Corhuila\\Mobile\\ppal-app\\package.json` on 2026-10-25. The organization repository `code-corhuila/ppal-app` does not currently expose that `package.json` on its default branch, so these values are local-workspace evidence and should be synchronized with the shared repository when its scaffold is pushed. The `^` and `~` prefixes are package version ranges, not claims about the exact resolved versions in `node_modules`. Do not copy versions from the course reference app.
 
 **Known constraints:**
 - One individual developer and a focused MVP.
@@ -24,9 +24,7 @@ The organization repository `code-corhuila/ppal-app` currently has no `package.j
 
 ## Decision
 
-**Proposed decision:** keep Ionic + Angular + Capacitor as PantryPal's technology stack, use Angular Signals with a feature facade/view-model for UI state, RxJS at asynchronous HTTP boundaries where streams are useful, Angular Router for centralized navigation, Reactive Forms for field-level form behavior, and one Angular HttpClient configuration in the data layer.
-
-This proposal becomes **Accepted** after the local `package.json` versions and the verification command are recorded below.
+**Decision:** keep Ionic + Angular + Capacitor as PantryPal's technology stack, use Angular Signals with a feature facade/view-model for UI state, RxJS at asynchronous HTTP boundaries where streams are useful, Angular Router for centralized navigation, Reactive Forms for field-level form behavior, and one Angular HttpClient configuration in the data layer. This is a project-specific selection, not a claim that Angular is universally superior.
 
 ### Weighted decision matrix
 
@@ -58,21 +56,23 @@ The MVP has no login or user identity, so it has no access token, refresh token,
 
 The selected MVP connectivity strategy is online-only: failed requests show a recoverable error, not an empty list or fake success. A read-through cache/offline mode is deferred by ADR-002; this is a deliberate scope trade-off and does not claim to satisfy an offline-cache implementation requirement.
 
-### Version record — required before acceptance
+### Version record — local package.json declarations
 
-Record actual values from the local application's `package.json`; do not use the sample application's versions.
+The values below are the declarations reported from the local application's `package.json`. Ranges are preserved as declared; the exact resolved versions can be checked separately with `npm ls --depth=0`.
 
 | Package | Actual local version |
 |---|---|
-| `@ionic/angular` | **To verify** |
-| `@angular/core` | **To verify** |
-| `@angular/router` | **To verify** |
-| `@capacitor/core` | **To verify** |
-| `@capacitor/cli` | **To verify** |
-| `typescript` | **To verify** |
-| Test runner | **To verify** |
+| `@ionic/angular` | `^9.0.0` |
+| `@angular/core` | `22.2.3` |
+| `@angular/router` | `22.2.3` |
+| `@capacitor/core` | `8.5.3` |
+| `@capacitor/cli` | `8.5.3` |
+| `typescript` | `~6.0.0` |
+| `vitest` | `^4.1.12` |
 
-**Verification command:** pending local workspace verification. After recording the versions, run the existing build/lint/test commands and link or record the actual results; do not claim tests passed without execution evidence.
+**Version check command executed locally:** the developer ran a Node command that reads the above declarations from `package.json`. The command verifies declared package specs, not the exact resolved install. For exact resolved versions use `npm ls @ionic/angular @angular/core @angular/router @capacitor/core @capacitor/cli typescript vitest`.
+
+**Initial environment verification:** the previous local check reported the app build and lint passing. The test suite has not yet been run, so no test-pass claim is made. Run the existing test command before treating test execution as verified.
 
 ---
 
@@ -96,7 +96,7 @@ Record actual values from the local application's `package.json`; do not use the
 **Negative / Trade-offs:**
 - Angular conventions and Signals require deliberate learning and consistency.
 - The MVP does not demonstrate account authentication or offline caching; those choices must be presented honestly as scope limitations, not implemented features.
-- This matrix is still Proposed until the local package versions and verification evidence are recorded.
+- Build and lint were reported passing during the initial local scaffold verification; automated tests remain unexecuted and are still a validation item.
 
 **Impact on the system:**
 - Affected areas: `ppal-app`, state management, route table, product forms, shared UI tokens, API client, test strategy.

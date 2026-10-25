@@ -5,7 +5,7 @@ ADRs document important architectural decisions. Each file = one decision.
 ## How to create an ADR
 
 1. Copy `_template-adr.md`.
-2. Name it `records/ADR-NNN-short-title.md` (e.g. `ADR-002-state-management.md`).
+2. Name it `records/ADR-NNN-short-title.md` (e.g. `ADR-002-mvp-scope.md`).
 3. Fill it in completely — especially the evaluated alternatives.
 4. Once accepted, the status is **permanent** (it is not deleted; it is "Superseded" by another ADR).
 
@@ -21,5 +21,6 @@ ADRs document important architectural decisions. Each file = one decision.
 | # | Title | Status | Date |
 |---|-------|--------|------|
 | [ADR-001](./records/ADR-001-state-management-pattern.md) | State management pattern | Accepted | 2026-08-28 |
+| [ADR-002](./records/ADR-002-mvp-scope.md) | Minimum Viable Product scope | Accepted | 2026-10-25 |
 
 > Add a row here as you create ADRs in `records/`.

@@ -45,7 +45,7 @@ The Must-have backlog consists of eight stories:
 - **Should — US-12 — Display no-results feedback:** explain when search criteria return no products; this depends on search or other criteria being available.
 - **Could — US-06 — Filter by expiration status:** add filters for All Products, Expiring Soon, Expired, and No Expiration Date only if all Must stories pass and capacity remains.
 
-The priority definitions, rationale, and recommended delivery order are recorded in [Product Backlog Priorities](../../../00-governance/product-backlog-priorities.md). The GitHub Project `ppal-backlog` must be synchronized with that register before the operational board is considered updated.
+The priority definitions, rationale, and recommended delivery order are recorded in [Product Backlog Priorities](../../../00-governance/product-backlog-priorities.md). The twelve detailed story issues are now present in the GitHub Project `ppal-backlog` (confirmed by the user's screenshot on 2026-10-25). Priority is currently encoded in the issue titles. A dedicated single-select `Priority` field is recommended for filtering and reporting, but the board items no longer need to be created.
 
 The MVP has one demonstration pantry. Product records are independent, so repeated names are allowed. Product fields are `id`, `name`, `quantity`, `unit`, optional `expirationDate`, `category`, `createdAt`, and `updatedAt`. The API is the source of truth; the mobile app does not connect directly to PostgreSQL.
 

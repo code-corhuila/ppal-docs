@@ -7,7 +7,7 @@ A user story is **done only when all of these are true**:
 - [ ] Unit + widget/UI tests added and passing (see [`04-quality/testing-strategy.md`](../04-quality/testing-strategy.md)).
 - [ ] Runs on **both** target platforms without regressions.
 - [ ] No new linter, type, or accessibility warnings introduced.
-- [ ] Loading, empty, error, and offline states handled.
+- [ ] Loading, empty, error, and no-network/retry states handled. Offline operation or synchronization must not be implied unless explicitly included in the accepted scope.
 - [ ] Strings localized (no hardcoded user-facing text).
 - [ ] Analytics / crash reporting events added where relevant.
 - [ ] Documentation updated (feature doc, ADR if an architectural decision was made).

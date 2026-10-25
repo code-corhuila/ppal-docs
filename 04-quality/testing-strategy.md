@@ -1,31 +1,33 @@
 # Testing Strategy
 
-## Test Pyramid
+## Test levels
 
-| Type | Scope | Speed | Share |
-|------|-------|-------|-------|
-| Unit | Use cases, state holders, mappers — no UI, no I/O | Fast | ~70% |
-| Widget / UI | A single screen/component in isolation | Medium | ~20% |
-| Integration / E2E | Full flow on a simulator/emulator or device | Slow | ~10% |
+| Type | Scope | Typical tools/approach | Relative speed |
+|---|---|---|---|
+| Unit | Domain rules, validators, use cases, facades/state transitions, mappers | Jasmine/Karma or the test runner configured in the Ionic + Angular scaffold; deterministic fakes/mocks | Fast |
+| Component/UI | One Ionic page or component in isolation | Angular component tests; verify accessible labels and visible state | Medium |
+| API integration | HTTP endpoints, validation, persistence mapping, status/error responses | API tests against a controlled test database or isolated test doubles as appropriate | Medium |
+| End-to-end | Main workflows across app/API on a simulator, emulator, or device | Focus first on Android for the academic demo; use additional platform testing if supported and required | Slow |
+
+## MVP behaviors to test
+
+- Expiration boundary conditions using a fixed clock and calendar dates in America/Bogota: yesterday, today, today + 3 days, today + 4 days, and no date.
+- Quantity rules: reject zero/negative values; integer quantities for Units/Packages; decimal quantities for weight/volume units.
+- Name validation after trimming; invalid unit/category; valid and invalid date-only strings.
+- Successful GET with products, successful GET with an empty array, network failure, malformed payload, and server error.
+- Create/update only show success after server success; request failure preserves form values; failed delete keeps the item visible.
+- Edit route fetches the item by ID, and unknown IDs produce a not-found state.
+- Loading, loaded, empty, load error, validation error, saving, save error, delete confirm/failure, and optional search no-results UI states.
+- Default ordering: earliest expiration date first; null dates last; ordering remains deterministic for equal dates.
 
 ## Rules
 
-- Every use case and state holder has unit tests; mock only **direct** dependencies.
-- Test **behavior and state transitions**, not implementation details.
-- Keep tests deterministic: no real network, no wall-clock sleeps, fixed clock/seed.
-- Arrange-Act-Assert; one logical assertion per test where possible.
+- Test behavior and state transitions, not private implementation details.
+- Use fixed clocks and deterministic data; do not use real network or sleeps in unit tests.
+- Keep domain rules pure and independently testable; mock only direct external dependencies.
+- Add regression tests for each discovered defect.
+- Target at least 80% coverage in domain rules/use cases and state facades if the chosen test tooling supports reliable coverage measurement; coverage is a floor, not a substitute for meaningful behavior checks.
 
-## Naming
+## Delivery evidence
 
-- `<unit>_<condition>_<expectedResult>`
-  - Example: `login_whenTokenExpired_showsSessionError`
-
-## Coverage
-
-- **80% minimum** on `domain/` (use cases) and state holders.
-- Coverage is a floor, not a goal — a covered line is not a tested behavior.
-
-## CI
-
-- Unit + widget suites run on **every PR**; the PR cannot merge if they fail.
-- Integration/E2E run on a nightly and pre-release job on at least one iOS and one Android device/emulator.
+The current application repository has only its initial scaffold; product features and their test evidence must not be represented as implemented until they exist and pass. Record each verification command/result separately from proposed acceptance criteria.

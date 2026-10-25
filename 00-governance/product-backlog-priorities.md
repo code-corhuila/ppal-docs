@@ -23,7 +23,7 @@ This backlog uses MoSCoW priorities. A story is **Must** only when the MVP canno
 | **Must** | **US-10 — Handle API failures** | Show an understandable error and recovery/retry path; never report an operation as successful before server confirmation. | Essential for truthful feedback in an API-backed app. |
 | **Should** | **US-05 — Search by product name** | Find products using a case-insensitive name search. | Useful convenience, but the core inventory flow works without search. |
 | **Should** | **US-11 — Show the empty-pantry state** | When the API successfully returns zero products, show a helpful message and an Add Product action. | Improves first-use guidance; US-01 must still distinguish empty data from an API failure. |
-| **Should** | **US-12 — Show no-results feedback** | Explain when search/filter criteria match no products and provide a way to revise or clear the criteria. | Complements US-05 and any filtering implemented; must not be confused with a truly empty pantry. |
+| **Should** | **US-12 — Show no-results feedback** | Explain when a product-name search matches no records and provide a way to clear the search. This story depends on US-05; status filters are not included unless US-06 is promoted from Could. | Complements US-05; must not be confused with a truly empty pantry. US-06 filtering remains optional. |
 | **Could** | **US-06 — Filter by expiration status** | Filter products by All Products, Expiring Soon, Expired, or No Expiration Date. | Adds extra UI/state combinations; defer until all Must stories pass and capacity is confirmed. |
 
 ## Recommended implementation order

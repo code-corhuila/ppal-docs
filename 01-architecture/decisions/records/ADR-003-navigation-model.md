@@ -25,23 +25,24 @@ PantryPal's MVP has a small number of screens: the pantry product list, an add/e
 
 ### Route registry
 
-| Route | Screen | Required arguments | Authentication |
+| Route | Screen | Required arguments | Guard / resolver |
 |---|---|---|---|
-| /pantry | Pantry list | None | Not applicable in the no-auth MVP |
-| /products/new | Add product form | None | Not applicable in the no-auth MVP |
-| /products/:id/edit | Edit product form | id route parameter | Not applicable in the no-auth MVP |
-| Unknown route | Not-found fallback or redirect to /pantry with safe feedback | None | Not applicable in the no-auth MVP |
+| /pantry | Pantry list | None | No auth guard: the accepted MVP has no login or protected routes |
+| /products/new | Add product form | None | CanDeactivate guard prompts before losing unsaved changes |
+| /products/:id/edit | Edit product form | id route parameter | Product resolver loads the latest record; missing/error result shows not-found/retry feedback |
+| Unknown route | Not-found fallback or redirect to /pantry with safe feedback | None | Central fallback; not an authorization control |
 
 Implementation rules:
 - Declare the route table centrally (for example in app.routes.ts) and render routed pages with ion-router-outlet.
-- Use /pantry as the default application destination; do not add /login or a protected-route guard to this MVP.
-- Pass only the product identifier to the edit route. Load the record from the repository/API when the destination opens; if it cannot be found, show a clear error and return to the list.
+- Use /pantry as the default application destination; do not add /login or an authentication guard to this MVP. The route registry must nevertheless name the form-leave guard and the edit-product resolver.
+- Pass only the product identifier to the edit route. A resolver loads the record from the repository/API when the destination opens; if it cannot be found, show clear not-found/retry feedback and offer return to the list.
 - After a successful create or edit, navigate back to /pantry and show confirmation. On validation or API failure, keep the form and entered values available for correction/retry.
 - Present delete confirmation as an accessible Ionic alert/dialog with the selected product's actual name. Cancel closes it without changing data. On confirmed deletion, update the list only after API success; on failure keep the record and display an error.
+- Use a CanDeactivate guard for unsaved add/edit form changes: confirm the user's intent before leaving a dirty form, and never auto-save as a side effect of navigation.
 - Respect Android hardware back and iOS back gestures. Cancel/back from an unsaved form must not persist changes.
 - Use the framework's normal URL parsing; do not create a second, feature-specific deep-link parser.
 
-**Justification:** a small centralized route table fits three primary destinations, preserves expected mobile back behavior, and avoids building authentication or route-level infrastructure that the MVP expressly excludes.
+**Justification:** a small centralized route table fits three primary destinations, preserves expected mobile back behavior, guards against losing unsaved form input, and resolves the requested product before rendering edit mode. It avoids adding an auth guard that has no protected route to guard in the current MVP.
 
 ---
 

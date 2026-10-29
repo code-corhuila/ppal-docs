@@ -9,7 +9,7 @@
 |---|---|---|---|
 | `id` | String identifier | Server-generated | Stable identifier used by API routes |
 | `name` | String | Yes | Trim whitespace; must not be blank |
-| `quantity` | Number | Yes | Must be greater than zero; integer for Units and Packages, decimal allowed for weight/volume |
+| `quantity` | Number | Yes | Must be greater than zero; integer for Units and Packages; at most three decimal places for all quantities |
 | `unit` | Enum | Yes | `unit`, `g`, `kg`, `ml`, `L`, or `package` |
 | `category` | Enum | Yes | `produce`, `dairy`, `pantry_staples`, `canned_goods`, `bakery`, `meat_eggs`, or `snacks_other` |
 | `expirationDate` | Calendar date (`YYYY-MM-DD`) or null | No | Optional; valid calendar date; past dates are allowed |
@@ -50,7 +50,7 @@ Calculate status in a domain function so boundary dates can be unit-tested with 
 ## Validation rules
 
 - Trim the product name before saving; reject a blank result.
-- `quantity > 0`.
+- `quantity > 0` and supports at most three decimal places, matching PostgreSQL `NUMERIC(12, 3)`.
 - `unit` and `category` must belong to their fixed allowed lists.
 - For `unit` and `package`, quantity must be an integer; `g`, `kg`, `ml`, and `L` may use decimals.
 - If present, expiration date must be a real calendar date in `YYYY-MM-DD` format. Past dates remain valid for already-expired stock.

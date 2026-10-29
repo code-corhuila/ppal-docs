@@ -1,0 +1,32 @@
+flowchart TB
+  subgraph Repo["GitHub source repositories"]
+    AppRepo["ppal-app<br/>Ionic + Angular + Capacitor"]
+    ApiRepo["ppal-api<br/>Node.js + Express + TypeScript"]
+    DbRepo["ppal-db<br/>PostgreSQL migration + seed"]
+    InfraRepo["ppal-infra<br/>Docker Compose"]
+    DocsRepo["ppal-docs<br/>ADRs + release evidence"]
+  end
+
+  subgraph Workstation["Developer workstation — controlled local demo"]
+    Android["Android emulator<br/>Pixel 10 Pro — Android 16 / API 36.1"]
+    WebBuild["Angular web build<br/>www/"]
+    NativeBuild["Capacitor sync + Gradle<br/>Debug APK"]
+    Compose["Docker Compose"]
+    Api["REST API<br/>127.0.0.1:3000 on host"]
+    Db[("PostgreSQL 17<br/>Private Compose network")]
+  end
+
+  AppRepo --> WebBuild
+  WebBuild --> NativeBuild
+  NativeBuild --> Android
+  InfraRepo --> Compose
+  ApiRepo --> Compose
+  DbRepo --> Compose
+  Compose --> Api
+  Compose --> Db
+  Api --> Db
+  Android -->|"HTTP via 10.0.2.2:3000<br/>debug build only"| Api
+  DocsRepo -. "contracts, ADRs and evidence" .-> AppRepo
+
+  Boundary["Security boundary: no authentication in the accepted MVP.<br/>Local / controlled demo only — no public multi-user API or database exposure."]
+  Api -.-> Boundary

@@ -125,3 +125,20 @@ Only enter results after running the tests. For each evidence item, retain date,
 ## Current completion status
 
 This record is a working deployment log, not the final 8–10 page submitted memory. At this point, a debug APK was built and installed from the Ionic starter scaffold. The new MVP code and local stack must be pulled, tested, rebuilt, and evidenced before a final report can honestly state that the functional application has passed end-to-end verification.
+
+
+## Review branches and pull requests
+
+All changes are isolated in review branches. They are deliberately left as draft PRs until local validation has been performed. No changes were merged to protected branches.
+
+| Repository | Branch | Draft pull request | Scope |
+|---|---|---|---|
+| ppal-db | feat/mvp-product-schema | https://github.com/code-corhuila/ppal-db/pull/1 | Product table migration and demo seed |
+| ppal-api | feat/mvp-products-api | https://github.com/code-corhuila/ppal-api/pull/1 | Validated REST endpoints and HTTP tests |
+| ppal-infra | feat/local-mvp-stack | https://github.com/code-corhuila/ppal-infra/pull/1 | Local PostgreSQL/API Docker Compose stack |
+| ppal-app | feat/h3-pantrypal-mvp | https://github.com/code-corhuila/ppal-app/pull/14 | Mobile MVP flow, validation, HTTP adapter, native integration, unit tests |
+| ppal-portal | chore/english-readme | https://github.com/code-corhuila/ppal-portal/pull/1 | English documentation; optional portal remains out of scope |
+| ppal-tools | chore/english-readme | https://github.com/code-corhuila/ppal-tools/pull/1 | English tooling documentation |
+| ppal-docs | docs/h3-deployment-plan | https://github.com/code-corhuila/ppal-docs/pull/2 | Activity 3 deployment and evidence record |
+
+GitHub Actions runs were created for the app/API PRs, but the observed jobs had no assigned runner and exposed no executed steps. They are not passing evidence. Local Windows verification remains mandatory before these drafts should be marked ready for review.

@@ -56,7 +56,7 @@ These results describe the scaffold build run before the new MVP implementation 
 | ADB install | Success | The APK installed on emulator emulator-5554. |
 | First installed screen | Ionic starter “Blank” | This proved installation and process startup only. It also exposed that product functionality had not yet been implemented in the local scaffold at that point. |
 
-The new implementation branch adds the MVP product domain, API adapter, product list and form, error handling, and domain tests. Those changes still require local installation, lint, tests, web build, Android rebuild, and device verification before they can be described as passing.
+The new implementation branch adds the MVP product domain, API adapter, product list and form, error handling, DTO validation/mapping, and domain tests. It also configures native status-bar text for the light application canvas and invokes best-effort light haptic feedback after server-confirmed create, update, and delete operations. These native APIs must be exercised on the emulator/device; they do not replace server confirmation. The branch still requires local installation, lint, tests, web build, Android rebuild, and device verification before it can be described as passing.
 
 ## Reproducible local workflow
 
@@ -108,7 +108,7 @@ Before release, record results for:
 - Validation: blank name, quantity <= 0, fractional quantity for Units/Packages, unsupported unit/category, invalid calendar date, valid optional null expiration date.
 - API behavior: list, get-by-ID, create, update, delete, validation errors, not found, and network/server failures.
 - UI behavior: loading, successfully empty pantry, loaded inventory, no-results search, validation errors, saving, save failure with values retained, delete confirmation, and delete failure without false success.
-- Native execution: startup on an emulator, form keyboard behavior, Android back navigation, and API connectivity.
+- Native execution: startup on an emulator, status-bar appearance, haptic feedback after server-confirmed mutations, form keyboard behavior, Android back navigation, and API connectivity.
 - Release checks: signing, artifact identity, and no secrets in Git history or artifacts.
 
 Only enter results after running the tests. For each evidence item, retain date, command, device/API level, result, and the corresponding screenshot or output.

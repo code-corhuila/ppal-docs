@@ -20,6 +20,8 @@ The intended local demonstration flow is:
 4. Docker Compose for local orchestration of the API and database.
 
 The API and database repositories are separate code repositories, not separate microservices per feature. The mobile app must not connect directly to PostgreSQL. The accepted MVP is a single demonstration pantry, online-only, with no accounts/login, camera, notifications/reminders, or offline cache. This unauthenticated design is restricted to local development or a controlled demonstration; it is not suitable for a public multi-user production service.
+The editable local deployment diagram is available at [activity-3-deployment-architecture.mmd](./activity-3-deployment-architecture.mmd). It depicts the actual local API/database boundary and the emulator-to-host route; it does not imply that a public cloud deployment has already occurred.
+
 
 ## Workstation and Android preparation
 

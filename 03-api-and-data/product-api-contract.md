@@ -45,6 +45,7 @@ Example response object (illustrative values):
 - `id`, `createdAt`, and `updatedAt` are server-managed.
 - `expirationDate` is a date-only string or null; do not serialize it as midnight UTC.
 - POST/PUT accepts only editable fields: `name`, `quantity`, `unit`, `category`, `expirationDate`.
+- Quantity must be greater than zero, use an allowed unit/category, use integer values for Units and Packages, and contain at most three decimal places to match PostgreSQL `NUMERIC(12, 3)`. The client and API both enforce these rules.
 - The list endpoint may return records in any order; the client domain/presentation flow applies expiration-date ascending order and places undated products last.
 - The client derives expiration status; it is not included in the request or stored as an authoritative field.
 

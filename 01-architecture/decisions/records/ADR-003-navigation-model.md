@@ -15,7 +15,7 @@ PantryPal's MVP has a small number of screens: the pantry product list, an add/e
 - Ionic + Angular + Capacitor is the chosen client stack.
 - The MVP has one demonstration pantry, no authentication, and online-only operations.
 - Delete confirmation is a transient interaction rather than a destination that needs a shareable URL.
-- The current repository is an initial scaffold; this records the intended routing design and does not claim the routes are already implemented.
+- At decision time, the repository was an initial scaffold. The review branch now contains the centralized route table, product form routes, edit-product resolver, and unsaved-changes guard. These are implementation claims for the feature branch, not a claim that the PR has been merged or that every route edge case has passed end-to-end testing.
 
 ---
 

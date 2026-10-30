@@ -9,6 +9,7 @@ flowchart TB
 
   subgraph Workstation["Developer workstation - controlled local demo"]
     Android["Android emulator - Pixel 10 Pro, Android 16 API 36.1"]
+    NativeUi["Capacitor native UI plugins - Haptics and Status Bar"]
     WebBuild["Angular development build - www"]
     NativeBuild["Capacitor sync and Gradle - debug APK"]
     Compose["Docker Compose"]
@@ -19,6 +20,7 @@ flowchart TB
   AppRepo --> WebBuild
   WebBuild --> NativeBuild
   NativeBuild --> Android
+  Android --> NativeUi
   InfraRepo --> Compose
   ApiRepo --> Compose
   DbRepo --> Compose
@@ -28,5 +30,7 @@ flowchart TB
   Android -->|HTTP via 10.0.2.2:3000 in debug only| Api
   DocsRepo -. contracts and evidence .-> AppRepo
 
+  ReleaseGap["Release gaps: production API URL is a reserved placeholder; no signed release artifact or public deployment is claimed."]
   Boundary["Security boundary: no authentication in the accepted MVP. Local or controlled demo only; no public multi-user API or database exposure."]
   Api -.-> Boundary
+  Android -.-> ReleaseGap

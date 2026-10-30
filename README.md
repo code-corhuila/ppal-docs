@@ -11,14 +11,14 @@ This documentation repository uses `main` as its only long-lived branch. Submit 
 | Repository | Role | MVP status |
 |---|---|---|
 | [`ppal-docs`](https://github.com/code-corhuila/ppal-docs) | Project governance and source of truth for scope, architecture, and contracts | In use |
-| [`ppal-app`](https://github.com/code-corhuila/ppal-app) | Ionic + Angular + Capacitor mobile client | MVP target; currently an initial scaffold |
-| [`ppal-api`](https://github.com/code-corhuila/ppal-api) | Single REST API and business/data access boundary | MVP target |
-| [`ppal-db`](https://github.com/code-corhuila/ppal-db) | PostgreSQL schema and migrations | MVP target |
-| [`ppal-infra`](https://github.com/code-corhuila/ppal-infra) | Infrastructure/orchestration configuration | MVP target |
+| [`ppal-app`](https://github.com/code-corhuila/ppal-app) | Ionic + Angular + Capacitor mobile client | MVP implementation on PR #14; locally built, tested, and manually exercised against the local API |
+| [`ppal-api`](https://github.com/code-corhuila/ppal-api) | Single REST API and business/data access boundary | Implemented on PR #1; 9 local HTTP tests and a TypeScript build passed; local PostgreSQL-backed API manually verified |
+| [`ppal-db`](https://github.com/code-corhuila/ppal-db) | PostgreSQL schema and migrations | Migration and demo seed implemented on PR #1; used by local Compose stack |
+| [`ppal-infra`](https://github.com/code-corhuila/ppal-infra) | Infrastructure/orchestration configuration | Local PostgreSQL/API Compose stack implemented on PR #1 and manually run |
 | [`ppal-portal`](https://github.com/code-corhuila/ppal-portal) | Optional web portal | Not in the MVP |
 | [`ppal-tools`](https://github.com/code-corhuila/ppal-tools) | Shared development tooling | Supporting repository |
 
-The architecture is split across separate repositories; this is not a monorepo. The mobile app must access PostgreSQL only through the REST API.
+The architecture is split across separate repositories; this is not a monorepo. Feature PRs remain under review and have not been merged into protected branches. The mobile app must access PostgreSQL only through the REST API. GitHub Actions is currently blocked before executing steps by an account billing lock; local verification results are documented separately.
 
 ## Project decision records and scope
 

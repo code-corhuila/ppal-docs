@@ -61,6 +61,7 @@ The following results were observed on the Windows workstation on 2026-10-29/30.
 | Docker Compose | PostgreSQL and API reported healthy | PostgreSQL 17 and the API run locally. API host port is bound to `127.0.0.1:3000`; PostgreSQL is not published to the host. |
 | GitHub Actions | Blocked before steps | GitHub reports: “The job has not started because your account is locked due to a billing issue.” The observed jobs have no runner and no executed steps. Do not report them as passing or as code-test failures. |
 | Dependency audit | Open follow-up | App install reported 6 audit findings; API install reported 4 (1 moderate, 1 high, 2 critical). Findings need triage. No `npm audit fix --force` was run. |
+| API install reproducibility | Open follow-up | The API repository has no committed `package-lock.json`; npm install may resolve different transitive versions later. Add and review a lockfile before treating dependency resolution as reproducible. |
 
 The Android debug build enables local cleartext networking only through `android/app/src/debug/AndroidManifest.xml`. The production environment still contains the reserved placeholder URL `https://api.pantrypal.invalid/api`; no public HTTPS API has been deployed. This debug artifact is suitable for controlled local testing, not public release.
 
@@ -100,7 +101,9 @@ The local Android emulator reaches the host API through 10.0.2.2:3000. If local 
 
 - Use Android Studio/Gradle to produce a debug APK for local tests.
 - Produce a release AAB only after the product tests pass and the release API URL is configured to a real HTTPS service.
-- Generate a dedicated release keystore and keep it outside Git, the build logs, and the deliverable source bundle. Keep passwords and signing variables in a secure local store or protected CI secrets.
+- The app review branch now includes Gradle logic that reads the ignored local file `android/keystore.properties` and a safe `android/keystore.properties.example` field-name template. The keystore and real passwords have not been created or committed.
+- Generate a dedicated release keystore locally and keep it outside Git, the build logs, and the deliverable source bundle. Keep passwords and signing variables in a secure local store or protected CI secrets.
+- Without that local properties file, Gradle may produce an unsigned release artifact; signature verification remains a required gate.
 - Verify package ID, app version, version code, target SDK, icon, release build output, and signing identity before upload.
 - A Play Console internal-testing upload is the preferred simulated/controlled distribution path if the required developer account is available. Otherwise, document the store submission as simulated and include real build/signing evidence without claiming a store release.
 

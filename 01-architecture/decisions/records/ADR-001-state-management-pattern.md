@@ -16,7 +16,7 @@ PantryPal is planned as an Ionic + Angular mobile app with a small, single-pantr
 - A single mobile client and a single REST API; the API is the source of truth.
 - No accounts, authentication, offline cache, or offline write queue in the MVP.
 - State transitions must be testable independently of rendered Ionic UI.
-- The intended stack is Ionic + Angular + Capacitor. This is an architectural decision, not a claim that product features have already been implemented.
+- The intended stack is Ionic + Angular + Capacitor. At decision time, the scaffold had not yet implemented product features. The current review branch now implements the facade, immutable screen-state signal, repository boundary, and explicit load/error states; local unit tests passed on 2026-10-29. GitHub Actions cannot currently verify the branch because its jobs are blocked before starting by an account billing lock.
 
 ---
 

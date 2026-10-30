@@ -1,11 +1,11 @@
 # Pantry Product API Contract
 
 - **Date:** 2026-10-25
-- **Status:** Proposed contract baseline for MVP implementation
+- **Status:** Implemented contract baseline; manually smoke-tested against the local PostgreSQL-backed API on 2026-10-29
 - **Related decisions:** ADR-002 (MVP Scope), ADR-003 (Navigation Model)
 - **Authentication:** No authentication in the MVP; controlled demonstration environment only.
 
-This document specifies the intended REST contract. It is not evidence that the API endpoints have already been implemented.
+The API endpoints are implemented on the review branch `feat/mvp-products-api`. The automated HTTP tests use an in-memory repository; manual local Compose testing separately verified the real PostgreSQL-backed API and the mobile CRUD flow. This is not evidence of a public deployment or a passing GitHub Actions run.
 
 ## Resource
 

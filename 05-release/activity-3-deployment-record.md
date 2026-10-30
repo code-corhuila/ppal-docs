@@ -1,8 +1,8 @@
 # Activity 3 — Mobile Build and Deployment Record
 
-- **Date:** 2026-10-29
+- **Date:** 2026-10-30
 - **Owner:** Gustavo Gallego
-- **Status:** Working record — implementation and release evidence are in progress
+- **Status:** Local MVP build and CRUD verified; signed release artifacts and selected H3 quality gates remain pending
 - **Scope basis:** PantryPal MVP decisions proposed in [ppal-docs PR #1](https://github.com/code-corhuila/ppal-docs/pull/1)
 - **Language:** English for all project artifacts, code, comments, commit messages, and user-facing application copy.
 
@@ -41,24 +41,34 @@ The following values were collected from the Windows workstation on 2026-10-29:
 
 The initial API 37 virtual device failed because its configured Play Store system-image directory was incomplete. A new Pixel 10 Pro virtual device using API 36.1 was created and started successfully. ADB reported the device state as device.
 
-## Verified baseline evidence
+## Verified implementation evidence
 
-These results describe the scaffold build run before the new MVP implementation was added to its review branch. Re-run these commands against the completed implementation branch before treating them as final release evidence.
+The following results were observed on the Windows workstation on 2026-10-29/30. They are local results on review branches; they are not GitHub Actions results and do not imply that the PRs are merged.
 
 | Check | Result | Evidence interpretation |
 |---|---|---|
-| npm ci | Completed | Dependencies were installed; npm reported six audit findings and install-script approval warnings. |
-| npm run build | Passed | Angular generated the web bundle in www. |
-| npm run lint | Passed | ESLint reported that all current files passed. |
-| npm test -- --configuration ci | 2 tests passed | Only the two starter scaffold tests existed at that time; this was not full PantryPal coverage. |
-| npx cap add android | Passed | Capacitor generated a local Android project and copied web assets. |
-| npx cap sync android | Passed | Web assets and four installed Capacitor plugins were copied/synchronized. |
-| .\android\gradlew.bat -p android assembleDebug | BUILD SUCCESSFUL | Generated a debug APK. Gradle downloaded its wrapper distribution and Android Build Tools 35. |
-| Debug APK | 4,315,010 bytes | Located at android/app/build/outputs/apk/debug/app-debug.apk on the workstation. |
-| ADB install | Success | The APK installed on emulator emulator-5554. |
-| First installed screen | Ionic starter “Blank” | This proved installation and process startup only. It also exposed that product functionality had not yet been implemented in the local scaffold at that point. |
+| Mobile unit tests | `npm test -- --configuration ci`: 22 tests passed across 6 files | Local unit-test evidence only; this does not establish the 80% coverage target. |
+| Mobile lint | `npm run lint`: passed | ESLint reported all files pass. |
+| Mobile web build | `npm run build`: passed | Angular generated web assets in `www`. |
+| Capacitor sync | `npm run build:android:debug`: passed | Web assets and 4 Capacitor plugins synchronized. |
+| Android debug build | Gradle `assembleDebug`: `BUILD SUCCESSFUL` | Debug APK generated after setting the local SDK path in `android/local.properties`. |
+| Android install | ADB `install -r`: `Success` | Debug APK installed on `emulator-5554`, Pixel 10 Pro, Android 16 / API 36.1. |
+| Mobile-to-API read | Passed manually | PantryPal loaded four seeded products from the PostgreSQL-backed REST API. |
+| Mobile create/update/delete | Passed manually | A product was created through the app, its quantity changed from 1 to 2, then it was deleted. The API confirmed the values and the absent ID. |
+| API automated tests | `npm test`: 9 tests passed | Current HTTP tests use an in-memory repository; they are not automated PostgreSQL integration tests. |
+| API TypeScript build | `npm run build`: passed | API source compiled successfully. |
+| API date-only contract | Fixed and smoke-tested | PostgreSQL `DATE` now serializes as `YYYY-MM-DD` or `null`, matching the mobile mapper and resolving the observed load failure. |
+| Docker Compose | PostgreSQL and API reported healthy | PostgreSQL 17 and the API run locally. API host port is bound to `127.0.0.1:3000`; PostgreSQL is not published to the host. |
+| GitHub Actions | Blocked before steps | GitHub reports: “The job has not started because your account is locked due to a billing issue.” The observed jobs have no runner and no executed steps. Do not report them as passing or as code-test failures. |
+| Dependency audit | Open follow-up | App install reported 6 audit findings; API install reported 4 (1 moderate, 1 high, 2 critical). Findings need triage. No `npm audit fix --force` was run. |
 
-The new implementation branch adds the MVP product domain, API adapter, product list and form, error handling, DTO validation/mapping, and domain tests. It also configures native status-bar text for the light application canvas and invokes best-effort light haptic feedback after server-confirmed create, update, and delete operations. These native APIs must be exercised on the emulator/device; they do not replace server confirmation. The branch still requires local installation, lint, tests, web build, Android rebuild, and device verification before it can be described as passing.
+The Android debug build enables local cleartext networking only through `android/app/src/debug/AndroidManifest.xml`. The production environment still contains the reserved placeholder URL `https://api.pantrypal.invalid/api`; no public HTTPS API has been deployed. This debug artifact is suitable for controlled local testing, not public release.
+
+### Native capability status and scope gap
+
+The application currently uses Capacitor Haptics for best-effort tactile feedback after server-confirmed mutations and Capacitor Status Bar for native status-bar styling. These non-sensitive UI capabilities do not request camera, location, or notification permissions. Current code calls the plugins through a feature service/root component; it does not yet demonstrate both capabilities as pure ports with dedicated adapters and test doubles. The H3 manual describes two native plugins behind ports and unit tests for the relevant native-use-case branches. This architecture/testing criterion remains open.
+
+Camera/photos, geolocation, notifications/reminders, login, and offline sync remain excluded by ADR-002. This is an intentional scope/security decision, not a claim that those features were implemented. If the H3 rubric interprets the two-plugin criterion as requiring permission-sensitive plugins specifically, the current MVP scope conflicts with that interpretation; resolve it explicitly with the instructor or through an approved scope amendment. Do not silently mark the permission-flow criterion complete.
 
 ## Reproducible local workflow
 
@@ -104,7 +114,7 @@ Firebase Hosting is primarily a web/static hosting option and is not, by itself,
 
 ## Final test strategy
 
-Before release, record results for:
+The list/create/update/delete path is verified locally, but it is not the full acceptance matrix. Before a release decision, record results for:
 
 - Domain unit tests: expiry before today, today, today plus three days, today plus four days, and no expiration date in the America/Bogota calendar.
 - Validation: blank name, quantity <= 0, fractional quantity for Units/Packages, unsupported unit/category, invalid calendar date, valid optional null expiration date.
@@ -124,10 +134,13 @@ Only enter results after running the tests. For each evidence item, retain date,
 - Keep API credentials, release signing material, and environment-specific configuration outside the repository.
 - Revisit authentication, multi-user isolation, HTTPS hosting, offline behavior, native reminders, and camera features only through an explicit scope/security decision.
 
-## Current completion status
+## Current completion status and Go / No-Go
 
-This record is a working deployment log, not the final 8–10 page submitted memory. At this point, a debug APK was built and installed from the Ionic starter scaffold. The new MVP code and local stack must be pulled, tested, rebuilt, and evidenced before a final report can honestly state that the functional application has passed end-to-end verification.
+**GO for a controlled local academic demonstration:** the app is built, installed, and manually verified against the local PostgreSQL-backed API for list/create/update/delete. Local mobile tests (22), mobile lint, mobile web build, API tests (9), API TypeScript build, and Android debug Gradle build passed.
 
+**NO-GO for public or store release:** no real HTTPS production API exists; the production URL is still a reserved placeholder; the app/API have no authentication or per-user isolation; dependency findings remain untriaged; no release keystore was created; no release AAB/APK has been signed and verified; no cloud deployment or store upload occurred; GitHub Actions is blocked before its steps start; test coverage by folder and the complete H3 native-plugin-port criterion are not evidenced. The debug configuration must never be used for production.
+
+This distinction must be preserved in the Activity 3 memo. A local debug APK and a working CRUD path are valid evidence, but they are not a signed release. Update this record again when release artifacts, port/adapter tests, dependency review, and remaining acceptance cases are completed.
 
 ## Review branches and pull requests
 

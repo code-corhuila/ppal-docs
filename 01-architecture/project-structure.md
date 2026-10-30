@@ -4,6 +4,11 @@ The Ionic + Angular client on `feat/h3-pantrypal-mvp` uses a feature-first struc
 
 ~~~text
 src/app/
+├── core/native/
+│   ├── native-capabilities.port.ts          Pure TypeScript native ports
+│   ├── native-capabilities.token.ts          Angular DI tokens at composition boundary
+│   ├── capacitor-haptics.adapter.ts          Haptics plugin adapter
+│   └── capacitor-status-bar.adapter.ts      Status Bar plugin adapter
 ├── app.component.*                         Root Ionic shell
 ├── app.routes.ts                            Centralized Angular routes
 ├── home/

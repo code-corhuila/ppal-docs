@@ -144,7 +144,7 @@ This distinction must be preserved in the Activity 3 memo. A local debug APK and
 
 ## Review branches and pull requests
 
-All changes are isolated in review branches. They are deliberately left as draft PRs until local validation has been performed. No changes were merged to protected branches.
+All changes are isolated in review branches and none have been merged to protected branches. The app, API, DB, infrastructure, and Activity 3 documentation PRs remain drafts while remaining release evidence is prepared. The H2 documentation PR is open for instructor review; merge only after the required approval.
 
 | Repository | Branch | Draft pull request | Scope |
 |---|---|---|---|

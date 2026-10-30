@@ -15,7 +15,7 @@ into explicit, enforceable gates: tests, performance budgets, and a security che
 | File | Purpose |
 |------|---------|
 | [testing-strategy.md](./testing-strategy.md) | Test pyramid, naming, coverage targets |
-| [mvp-acceptance-matrix.md](./mvp-acceptance-matrix.md) | Planned MVP scenarios mapped to user stories and expected results |
+| [mvp-acceptance-matrix.md](./mvp-acceptance-matrix.md) | MVP acceptance scenarios mapped to user stories; execution is partial and separately evidenced |
 | [performance-budgets.md](./performance-budgets.md) | Startup, frame rate, size, memory budgets |
 | [mobile-security.md](./mobile-security.md) | Runtime security checklist |
 | [_template-test-case.md](./_template-test-case.md) | Template to write a manual/exploratory test case |

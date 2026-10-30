@@ -11,7 +11,7 @@ This documentation repository uses `main` as its only long-lived branch. Submit 
 | Repository | Role | MVP status |
 |---|---|---|
 | [`ppal-docs`](https://github.com/code-corhuila/ppal-docs) | Project governance and source of truth for scope, architecture, and contracts | In use |
-| [`ppal-app`](https://github.com/code-corhuila/ppal-app) | Ionic + Angular + Capacitor mobile client | MVP implementation on PR #14; locally built, tested, and manually exercised against the local API |
+| [`ppal-app`](https://github.com/code-corhuila/ppal-app) | Ionic + Angular + Capacitor mobile client | MVP implementation on PR #14; prior revision locally tested and manually exercised against the local API; latest native port/adapter refactor requires local re-validation |
 | [`ppal-api`](https://github.com/code-corhuila/ppal-api) | Single REST API and business/data access boundary | Implemented on PR #1; 9 local HTTP tests and a TypeScript build passed; local PostgreSQL-backed API manually verified |
 | [`ppal-db`](https://github.com/code-corhuila/ppal-db) | PostgreSQL schema and migrations | Migration and demo seed implemented on PR #1; used by local Compose stack |
 | [`ppal-infra`](https://github.com/code-corhuila/ppal-infra) | Infrastructure/orchestration configuration | Local PostgreSQL/API Compose stack implemented on PR #1 and manually run |

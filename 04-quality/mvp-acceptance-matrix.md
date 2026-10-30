@@ -1,7 +1,7 @@
 # PantryPal MVP Acceptance Test Matrix
 
 - **Date:** 2026-10-25
-- **Status:** Planned — test execution is pending product implementation
+- **Status:** Acceptance baseline defined; execution is partial and recorded separately in the Activity 3 deployment record
 - **Scope basis:** ADR-002 and Product Backlog Priorities
 - **Test environment:** To be documented when the API, database, and mobile features are implemented. Do not treat this matrix as proof of passing tests.
 

@@ -10,6 +10,7 @@
 | File | Purpose |
 |------|---------|
 | [agile-conventions.md](./agile-conventions.md) | Sprint structure, ceremonies, estimation |
+| [product-backlog-priorities.md](./product-backlog-priorities.md) | MoSCoW priorities, rationale, and recommended delivery order for the MVP backlog |
 | [git-conventions.md](./git-conventions.md) | Branch strategy, commit format, PR & release policy |
 | [definition-of-ready.md](./definition-of-ready.md) | Checklist for a story to enter a sprint |
 | [definition-of-done.md](./definition-of-done.md) | Checklist every completed story must satisfy |

@@ -1,13 +1,26 @@
 # Changelog
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [SemVer](https://semver.org/)
+
 ## [Unreleased]
-## [1.0.0] - 2026-08-28
+
 ### Added
-- Manual-style governance scaffold for mobile apps: numbered sections, each with a README and copy-and-fill templates
-- `00-sdd-guide.md` — methodology and fill-in order
-- 00-governance: agile, git, DoR/DoD, security rules + sprint-retro template
-- 01-architecture: structure, layers & state, navigation, ADRs (with example ADR-001) + feature/screen templates
-- 02-code-and-ui: coding standards, design system, accessibility, i18n + component template
-- 03-api-and-data: networking, auth, persistence, offline-sync + endpoint/entity templates
-- 04-quality: testing strategy, performance budgets, mobile security + test-case template
-- 05-release: CI/CD, signing & stores, observability + release-checklist template
+- PantryPal ADR-002 MVP scope decision and realistic MoSCoW backlog priorities.
+- Refined existing ADR-001 to specify Ionic + Angular Signals state management, and added ADR-003 for centralized Angular Router + Ionic navigation.
+- Product domain model, REST API contract, prototype state specification, and MVP acceptance test matrix with partial execution; see Activity 3 evidence record.
+
+### Changed
+- Aligned governance, architecture, networking, authentication, offline behavior, and testing guidance with the no-auth, online-only MVP.
+- Added the twelve prioritized GitHub issues to `ppal-backlog`; a dedicated Priority single-select field remains a recommended board improvement.
+- Updated repository overview and documentation indexes to keep MVP traceability discoverable.
+
+## [1.0.0] - 2026-08-28
+
+### Added
+- Manual-style governance scaffold for mobile apps: numbered sections, each with a README and copy-and-fill templates.
+- `00-sdd-guide.md` — methodology and fill-in order.
+- `00-governance`: agile, git, DoR/DoD, security rules, and sprint-retro template.
+- `01-architecture`: structure, layers and state, navigation, ADRs (with example ADR-001), and feature/screen templates.
+- `02-code-and-ui`: coding standards, design system, accessibility, i18n, and component template.
+- `03-api-and-data`: networking, authentication, persistence, offline sync, and endpoint/entity templates.
+- `04-quality`: testing strategy, performance budgets, mobile security, and test-case template.
+- `05-release`: CI/CD, signing and stores, observability, and release-checklist template.

@@ -15,6 +15,7 @@ into explicit, enforceable gates: tests, performance budgets, and a security che
 | File | Purpose |
 |------|---------|
 | [testing-strategy.md](./testing-strategy.md) | Test pyramid, naming, coverage targets |
+| [mvp-acceptance-matrix.md](./mvp-acceptance-matrix.md) | MVP acceptance scenarios mapped to user stories; execution is partial and separately evidenced |
 | [performance-budgets.md](./performance-budgets.md) | Startup, frame rate, size, memory budgets |
 | [mobile-security.md](./mobile-security.md) | Runtime security checklist |
 | [_template-test-case.md](./_template-test-case.md) | Template to write a manual/exploratory test case |
@@ -34,5 +35,6 @@ into explicit, enforceable gates: tests, performance budgets, and a security che
 ## Questions this section must answer
 
 - What is tested, at which level, and how much?
+- Which planned acceptance scenarios must pass before the MVP is considered complete?
 - What are the performance budgets, and how are regressions caught?
 - What security checks run before a release?

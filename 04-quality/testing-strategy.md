@@ -1,31 +1,44 @@
 # Testing Strategy
 
-## Test Pyramid
+## Test levels
 
-| Type | Scope | Speed | Share |
-|------|-------|-------|-------|
-| Unit | Use cases, state holders, mappers — no UI, no I/O | Fast | ~70% |
-| Widget / UI | A single screen/component in isolation | Medium | ~20% |
-| Integration / E2E | Full flow on a simulator/emulator or device | Slow | ~10% |
+| Type | Scope | Typical tools/approach | Relative speed |
+|---|---|---|---|
+| Unit | Domain rules, validators, facades/state transitions, DTO mapper, native port consumers | Vitest through the Angular unit-test builder, with deterministic hand-written fakes and Angular TestBed where needed | Fast |
+| Component/UI | One Ionic page or component in isolation | Angular TestBed with jsdom; verify visible state and user behavior | Medium |
+| API HTTP contract | Endpoints, validation, status/error responses | Vitest and Supertest; current tests use an in-memory repository | Medium |
+| Database integration | SQL schema, constraints, PostgreSQL serialization and persistence mapping | PostgreSQL test database or isolated Compose test stack; not yet automated | Medium |
+| End-to-end | Main workflows across app/API on a simulator, emulator, or device | Focus first on Android for the academic demo; use additional platform testing if supported and required | Slow |
+
+## MVP behaviors to test
+
+- Expiration boundary conditions using a fixed clock and calendar dates in America/Bogota: yesterday, today, today + 3 days, today + 4 days, and no date.
+- Quantity rules: reject zero/negative values; integer quantities for Units/Packages; decimal quantities for weight/volume units.
+- Name validation after trimming; invalid unit/category; valid and invalid date-only strings.
+- Successful GET with products, successful GET with an empty array, network failure, malformed payload, and server error.
+- Create/update only show success after server success; request failure preserves form values; failed delete keeps the item visible.
+- Edit route fetches the item by ID, and unknown IDs produce a not-found state.
+- Loading, loaded, empty, load error, validation error, saving, save error, delete confirm/failure, and optional search no-results UI states.
+- Default ordering: earliest expiration date first; null dates last; ordering remains deterministic for equal dates.
 
 ## Rules
 
-- Every use case and state holder has unit tests; mock only **direct** dependencies.
-- Test **behavior and state transitions**, not implementation details.
-- Keep tests deterministic: no real network, no wall-clock sleeps, fixed clock/seed.
-- Arrange-Act-Assert; one logical assertion per test where possible.
+- Test behavior and state transitions, not private implementation details.
+- Use fixed clocks and deterministic data; do not use real network or sleeps in unit tests.
+- Keep domain rules pure and independently testable; mock only direct external dependencies.
+- Add regression tests for each discovered defect.
+- Target at least 80% coverage in domain rules/use cases and state facades if the chosen test tooling supports reliable coverage measurement; coverage is a floor, not a substitute for meaningful behavior checks.
 
-## Naming
+## Delivery evidence
 
-- `<unit>_<condition>_<expectedResult>`
-  - Example: `login_whenTokenExpired_showsSessionError`
+The implementation now exists on the feature review branches. Local evidence collected on 2026-10-29:
 
-## Coverage
+- Mobile app: `npm test -- --configuration ci` — 22 tests passed across six files; `npm run lint` passed; web build passed.
+- Android: development build and Capacitor sync passed; Gradle `assembleDebug` succeeded; APK installed and opened on the Pixel 10 Pro Android 16 / API 36.1 emulator.
+- API: `npm test` — 9 HTTP tests passed; `npm run build` passed.
+- Local integration: Docker Compose reported the API and PostgreSQL containers healthy; Android loaded four seeded products; a test product was created, edited, and deleted through the UI and verified via the API.
+- Hosted CI: GitHub reported an account billing lock before any job step started. Those jobs are blocked, not passing and not evidence of a source-code test failure.
 
-- **80% minimum** on `domain/` (use cases) and state holders.
-- Coverage is a floor, not a goal — a covered line is not a tested behavior.
+The 22-test mobile result is a baseline for the app revision tested on 2026-10-29. The later feature-branch head introduces Haptics/Status Bar ports and adapters, adds native port tests, and standardizes the test command as `npm run test:ci`; these new changes must be revalidated locally before the current head is reported as passing. GitHub Actions is blocked before job steps due an account billing issue, so it provides no pass/fail evidence for the code.
 
-## CI
-
-- Unit + widget suites run on **every PR**; the PR cannot merge if they fail.
-- Integration/E2E run on a nightly and pre-release job on at least one iOS and one Android device/emulator.
+This evidence does not prove that every scenario above has passed. Still pending or requiring explicit retained evidence are the successful empty-pantry UI, all date-boundary cases on the emulator, validation and error-recovery paths on device, haptic/keyboard/back-navigation checks, PostgreSQL integration tests automated in the API suite, dependency vulnerability triage, release signing, and any cloud/store deployment. Additionally, the H3 permission-sensitive native-plugin criterion remains a rubric gap because the accepted MVP defers camera, geolocation, and notifications; Haptics and Status Bar need no runtime permissions. Record commands, date, result, emulator/API level, and the matching output or screenshot. Never present an acceptance criterion as a test result without executing it.

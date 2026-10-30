@@ -19,7 +19,7 @@ people rotate. Decide it once, write it down, and enforce it in review.
 | [navigation.md](./navigation.md) | Routing model and navigation rules |
 | [_template-feature.md](./_template-feature.md) | Template to document one feature end to end |
 | [_template-screen.md](./_template-screen.md) | Template to spec a single screen |
-| [decisions/](./decisions/) | Architecture Decision Records (ADRs) |
+| [decisions/](./decisions/) | Architecture Decision Records (ADRs), including state, MVP scope, and navigation decisions |
 
 ---
 

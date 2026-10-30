@@ -1,35 +1,51 @@
 # Project Structure
 
-Organize by **feature**, not by technical type. Each feature owns its layers.
+The Ionic + Angular client on `feat/h3-pantrypal-mvp` uses a feature-first structure, with UI, domain rules, and data access separated. The structure below reflects the current implementation branch. Empty generic `core/` and `shared/` folders are intentionally omitted until a concrete shared use case requires them.
 
-```
-lib|src/
-├── core/                 Shared across features
-│   ├── di/               Dependency injection / composition root
-│   ├── network/          HTTP client, interceptors
-│   ├── storage/          Local DB / secure storage wrappers
-│   └── theme/            Design tokens, typography
-├── features/
-│   └── <feature>/
-│       ├── presentation/ Screens, widgets/views, state holders
-│       ├── domain/       Entities, use cases, repository interfaces
-│       └── data/         Repository impls, data sources, DTOs, mappers
-├── shared/               Reusable UI components used by many features
-└── app.<ext>             Root app + routing table
-```
+~~~text
+src/app/
+├── core/native/
+│   ├── native-capabilities.port.ts          Pure TypeScript native ports
+│   ├── native-capabilities.token.ts          Angular DI tokens at composition boundary
+│   ├── capacitor-haptics.adapter.ts          Haptics plugin adapter
+│   └── capacitor-status-bar.adapter.ts      Status Bar plugin adapter
+├── app.component.*                         Root Ionic shell
+├── app.routes.ts                            Centralized Angular routes
+├── home/
+│   ├── home.page.ts / .html / .scss        Pantry list and search
+│   └── home.page.spec.ts                  Home-page test
+└── features/pantry/
+    ├── domain/
+    │   ├── product.ts
+    │   ├── product-validation.ts
+    │   └── expiration.ts
+    ├── data/
+    │   ├── product-api.repository.ts
+    │   ├── product.dto-mapper.ts
+    │   ├── api-resilience.interceptor.ts
+    │   └── product-repository.token.ts
+    └── presentation/
+        ├── pantry.facade.ts
+        ├── product-form.page.ts / .html / .scss
+        ├── product.resolver.ts
+        ├── pending-changes.guard.ts
+        └── native-feedback.service.ts
+~~~
 
 ## Rules
 
-- One feature = one folder under `features/`. No cross-feature imports; share through
-  `core/` or `shared/`.
-- A file declares one primary type; the filename matches it.
-- `shared/` holds only presentation-agnostic, reusable UI. Business logic never lives there.
-- No feature reaches into another feature's `data/` or `domain/`.
+- One feature = one folder under features/; PantryPal's MVP is small enough to start with only pantry/.
+- Domain rules must not import Angular, Ionic, HTTP, or database-specific code.
+- Page components must not call the API directly; they dispatch user actions to the feature facade/use case.
+- The data layer implements repository contracts and is the only mobile layer that knows HTTP DTOs.
+- The app communicates with the REST API; the mobile app must not connect directly to PostgreSQL.
+- Avoid introducing generic layers or separate services until there is a concrete use case.
 
 ## Naming
 
 | Thing | Convention | Example |
-|-------|------------|---------|
-| Feature folder | `kebab-case` | `order-history/` |
-| Type | `PascalCase` | `OrderRepository` |
-| File | matches type | `order_repository.*` |
+|---|---|---|
+| Feature folder | kebab-case | pantry/ |
+| Angular component | Angular project convention | pantry-list.page.ts |
+| Type / class | PascalCase | ProductRepository |
+| File | Angular project convention | product.repository.ts |

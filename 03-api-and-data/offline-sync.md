@@ -1,31 +1,23 @@
-# Offline & Sync
+# Offline & Sync — MVP Scope
 
-## Per-feature strategy
+## Current decision
 
-Decide and document the strategy for each feature:
+PantryPal's MVP uses an **online-only** strategy. It does not promise cached offline reads, offline writes, queued mutations, conflict resolution, or synchronization. This aligns with ADR-002 — MVP Scope.
 
-| Strategy | When to use |
-|----------|-------------|
-| Online-only | Data must be fresh; offline use is not required |
-| Read-through cache | Read offline, write online |
-| Offline-first | Full read/write offline, sync on reconnect |
+## Required connectivity behavior
 
-## Offline-first rules
+- Treat a failed request or unavailable network as an error, not as an empty pantry.
+- Show a clear error and a retry action.
+- Do not show create/edit/delete as successful until the REST API confirms the operation.
+- Preserve unsaved form values where feasible after a request fails.
+- Do not display stale locally cached products because no offline cache is part of the MVP.
 
-- Queue local mutations while offline; assign each a client-generated id.
-- Reconcile on reconnect with an explicit **conflict policy**:
-  - `last-write-wins`, `server-wins`, or a domain-specific merge — pick one per entity.
-- Make sync **idempotent**: replaying a queued mutation must not double-apply.
-- Surface sync/staleness state in the UI when data may be out of date.
+## Future strategies (not part of the MVP)
 
-## Connectivity
+| Strategy | Meaning |
+|----------|---------|
+| Online-only (chosen) | Data is requested from the API; failure is visible and retryable |
+| Read-through cache | Read from a cache offline, but require connectivity to write |
+| Offline-first | Support full read/write offline and synchronize on reconnect |
 
-- Treat connectivity as a stream, not a one-time check.
-- Retry queued work with backoff; cap attempts and expose a manual "retry" action.
-
-## Checklist
-
-- [ ] Strategy documented per feature.
-- [ ] Conflict policy defined per synced entity.
-- [ ] Sync is idempotent.
-- [ ] UI shows offline / syncing / stale states.
+Any move away from online-only requires a scope review and a new or superseding ADR. A future offline implementation would also need an explicit conflict policy, idempotent sync, retry limits/backoff, and UI states for stale/syncing data; none of those are current MVP commitments.

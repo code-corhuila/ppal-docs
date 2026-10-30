@@ -72,7 +72,9 @@ The values below are the declared specifications from the application's `package
 
 **Version check command executed locally:** the developer ran a Node command that reads the above declarations from `package.json`. The command verifies declared package specs, not the exact resolved install. For exact resolved versions use `npm ls @ionic/angular @angular/core @angular/router @capacitor/core @capacitor/cli typescript vitest`.
 
-**Local verification update (2026-10-29):** the app branch passed `npm test -- --configuration ci` (22 tests across six files), `npm run lint`, `npm run build`, `npm run build:android:debug`, and Gradle `assembleDebug`. The debug APK was installed on the Pixel 10 Pro Android 16 / API 36.1 emulator. Manual testing verified list loading and create, update, and delete against the local API/PostgreSQL stack. GitHub Actions is not passing evidence: its jobs did not start because GitHub reported the account locked due to a billing issue. These local checks do not constitute a signed production release.
+**Local verification update (2026-10-29):** the app branch at that time passed `npm test -- --configuration ci` (22 tests across six files), `npm run lint`, `npm run build`, `npm run build:android:debug`, and Gradle `assembleDebug`. The debug APK was installed on the Pixel 10 Pro Android 16 / API 36.1 emulator. Manual testing verified list loading and create, update, and delete against the local API/PostgreSQL stack.
+
+**Latest branch note (2026-10-30):** subsequent review commits introduced ports/adapters for Haptics and Status Bar, added native-feedback tests, aligned Android `versionName` to 1.0.0, added `npm run test:ci`, and tightened the production bundle budget to a warning at 1.5 MB / error at 2 MB. The new head must be re-run locally before these latest changes can be described as passing. GitHub Actions jobs have not started because GitHub reports an account billing lock. Local checks do not constitute a signed production release.
 
 ---
 

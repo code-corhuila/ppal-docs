@@ -1,0 +1,36 @@
+flowchart TB
+  subgraph Repo["GitHub source repositories"]
+    AppRepo["ppal-app - Ionic, Angular, Capacitor"]
+    ApiRepo["ppal-api - Node.js, Express, TypeScript"]
+    DbRepo["ppal-db - PostgreSQL migration and seed"]
+    InfraRepo["ppal-infra - Docker Compose"]
+    DocsRepo["ppal-docs - ADRs and release evidence"]
+  end
+
+  subgraph Workstation["Developer workstation - controlled local demo"]
+    Android["Android emulator - Pixel 10 Pro, Android 16 API 36.1"]
+    NativeUi["Haptics / Status Bar via ports and Capacitor adapters"]
+    WebBuild["Angular development build - www"]
+    NativeBuild["Capacitor sync and Gradle - debug APK"]
+    Compose["Docker Compose"]
+    Api["REST API - host port 127.0.0.1:3000"]
+    Db[("PostgreSQL 17 - private Compose network")]
+  end
+
+  AppRepo --> WebBuild
+  WebBuild --> NativeBuild
+  NativeBuild --> Android
+  Android --> NativeUi
+  InfraRepo --> Compose
+  ApiRepo --> Compose
+  DbRepo --> Compose
+  Compose --> Api
+  Compose --> Db
+  Api --> Db
+  Android -->|HTTP via 10.0.2.2:3000 in debug only| Api
+  DocsRepo -. contracts and evidence .-> AppRepo
+
+  ReleaseGap["Release gaps: production API URL is a reserved placeholder; no signed release artifact or public deployment is claimed."]
+  Boundary["Security boundary: no authentication in the accepted MVP. Local or controlled demo only; no public multi-user API or database exposure."]
+  Api -.-> Boundary
+  Android -.-> ReleaseGap

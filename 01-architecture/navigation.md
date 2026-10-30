@@ -42,4 +42,4 @@ flowchart TD
     F --> B
 ~~~
 
-> This describes the intended MVP design. The route table and flows are not a claim that the app screens have been implemented.
+> Implementation status (2026-10-30): the review branch contains these routes, the edit-product resolver, and the unsaved-changes guard. Local emulator smoke testing exercised the pantry route and CRUD navigation. That is not evidence that every navigation edge case or iOS behavior has been end-to-end tested.

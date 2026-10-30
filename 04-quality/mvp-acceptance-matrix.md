@@ -3,7 +3,7 @@
 - **Date:** 2026-10-25
 - **Status:** Acceptance baseline defined; execution is partial and recorded separately in the Activity 3 deployment record
 - **Scope basis:** ADR-002 and Product Backlog Priorities
-- **Test environment:** To be documented when the API, database, and mobile features are implemented. Do not treat this matrix as proof of passing tests.
+- **Test environment:** Windows workstation; Docker Compose with PostgreSQL 17 and the REST API; Pixel 10 Pro Android 16 / API 36.1 emulator. Execution is partial; this matrix defines expected cases and is not proof that every case passed. Executed results belong in the Activity 3 deployment record.
 
 | Test ID | Story / priority | Level | Scenario | Expected result |
 |---|---|---|---|---|

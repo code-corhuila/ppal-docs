@@ -1,22 +1,30 @@
 # Project Structure
 
-Organize the Ionic + Angular client by **feature**, with UI, domain rules, and data access separated. The following is the target structure for PantryPal; it describes the intended organization and does not claim these feature files already exist in the repository.
+The Ionic + Angular client on `feat/h3-pantrypal-mvp` uses a feature-first structure, with UI, domain rules, and data access separated. The structure below reflects the current implementation branch. Empty generic `core/` and `shared/` folders are intentionally omitted until a concrete shared use case requires them.
 
 ~~~text
 src/app/
-├── core/
-│   ├── api/                 API base URL and shared HTTP configuration
-│   ├── routing/             Shared route configuration if not at app root
-│   └── theme/               Global theme tokens and styles
-├── features/
-│   └── pantry/
-│       ├── presentation/    Pantry list, product form, alert/dialog, facade/state
-│       ├── domain/          Product entity, repository contract, validation,
-│       │                    expiration rules, and use cases
-│       └── data/            HTTP data source, DTOs, mapper, repository implementation
-├── shared/                  Reusable Ionic UI pieces (no pantry business rules)
-├── app.component.*          Root Ionic shell and router outlet
-└── app.routes.ts             Single centralized Angular route table
+├── app.component.*                         Root Ionic shell
+├── app.routes.ts                            Centralized Angular routes
+├── home/
+│   ├── home.page.ts / .html / .scss        Pantry list and search
+│   └── home.page.spec.ts                  Home-page test
+└── features/pantry/
+    ├── domain/
+    │   ├── product.ts
+    │   ├── product-validation.ts
+    │   └── expiration.ts
+    ├── data/
+    │   ├── product-api.repository.ts
+    │   ├── product.dto-mapper.ts
+    │   ├── api-resilience.interceptor.ts
+    │   └── product-repository.token.ts
+    └── presentation/
+        ├── pantry.facade.ts
+        ├── product-form.page.ts / .html / .scss
+        ├── product.resolver.ts
+        ├── pending-changes.guard.ts
+        └── native-feedback.service.ts
 ~~~
 
 ## Rules

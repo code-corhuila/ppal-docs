@@ -4,9 +4,10 @@
 
 | Type | Scope | Typical tools/approach | Relative speed |
 |---|---|---|---|
-| Unit | Domain rules, validators, use cases, facades/state transitions, mappers | Jasmine/Karma or the test runner configured in the Ionic + Angular scaffold; deterministic fakes/mocks | Fast |
-| Component/UI | One Ionic page or component in isolation | Angular component tests; verify accessible labels and visible state | Medium |
-| API integration | HTTP endpoints, validation, persistence mapping, status/error responses | API tests against a controlled test database or isolated test doubles as appropriate | Medium |
+| Unit | Domain rules, validators, facades/state transitions, DTO mapper, native port consumers | Vitest through the Angular unit-test builder, with deterministic hand-written fakes and Angular TestBed where needed | Fast |
+| Component/UI | One Ionic page or component in isolation | Angular TestBed with jsdom; verify visible state and user behavior | Medium |
+| API HTTP contract | Endpoints, validation, status/error responses | Vitest and Supertest; current tests use an in-memory repository | Medium |
+| Database integration | SQL schema, constraints, PostgreSQL serialization and persistence mapping | PostgreSQL test database or isolated Compose test stack; not yet automated | Medium |
 | End-to-end | Main workflows across app/API on a simulator, emulator, or device | Focus first on Android for the academic demo; use additional platform testing if supported and required | Slow |
 
 ## MVP behaviors to test

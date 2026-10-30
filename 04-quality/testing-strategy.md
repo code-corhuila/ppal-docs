@@ -30,4 +30,12 @@
 
 ## Delivery evidence
 
-The current application repository has only its initial scaffold; product features and their test evidence must not be represented as implemented until they exist and pass. Record each verification command/result separately from proposed acceptance criteria.
+The implementation now exists on the feature review branches. Local evidence collected on 2026-10-29:
+
+- Mobile app: `npm test -- --configuration ci` — 22 tests passed across six files; `npm run lint` passed; web build passed.
+- Android: development build and Capacitor sync passed; Gradle `assembleDebug` succeeded; APK installed and opened on the Pixel 10 Pro Android 16 / API 36.1 emulator.
+- API: `npm test` — 9 HTTP tests passed; `npm run build` passed.
+- Local integration: Docker Compose reported the API and PostgreSQL containers healthy; Android loaded four seeded products; a test product was created, edited, and deleted through the UI and verified via the API.
+- Hosted CI: GitHub reported an account billing lock before any job step started. Those jobs are blocked, not passing and not evidence of a source-code test failure.
+
+This evidence does not prove that every scenario above has passed. Still pending or requiring explicit retained evidence are the successful empty-pantry UI, all date-boundary cases on the emulator, validation and error-recovery paths on device, haptic/keyboard/back-navigation checks, PostgreSQL integration tests automated in the API suite, dependency vulnerability triage, release signing, and any cloud/store deployment. Record commands, date, result, emulator/API level, and the matching output or screenshot. Never present an acceptance criterion as a test result without executing it.

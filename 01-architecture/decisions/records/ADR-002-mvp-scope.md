@@ -7,7 +7,7 @@
 
 ### Implementation status note — 2026-10-30
 
-This note records evidence gathered after the scope decision; it does not change the accepted scope. On the review branches, the app has passed 22 local unit tests, lint, and web builds; the API has passed 9 automated tests and a TypeScript build. The local Compose stack reached healthy PostgreSQL and API states, and manual Android-emulator tests verified list loading plus create, update, and delete against the API/database. GitHub Actions jobs are currently blocked before their steps start because GitHub reports the account is locked due to a billing issue. Those jobs are neither passing nor evidence of source-code test failures. No public cloud deployment, signed release, or store publication is claimed.
+This note records evidence gathered after the scope decision; it does not change the accepted scope. The app revision tested on 2026-10-29 passed 22 local unit tests, lint, and web builds; the API passed 9 automated tests and a TypeScript build. The local Compose stack reached healthy PostgreSQL and API states, and manual Android-emulator tests verified list loading plus create, update, and delete against the API/database. Later app-branch commits introduced Haptics/Status Bar ports and adapters and added native tests; the latest app head must be re-tested locally before it can be described as passing. GitHub Actions jobs are currently blocked before their steps start because GitHub reports the account is locked due to a billing issue. Those jobs are neither passing nor evidence of source-code test failures. No public cloud deployment, signed release, or store publication is claimed.
 
 ---
 

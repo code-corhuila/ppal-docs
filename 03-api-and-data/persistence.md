@@ -1,10 +1,14 @@
-# Persistence (Local Database)
+# Client-Side Persistence
 
-## Choice
+## Current MVP decision
 
-- Choose **one** local store per app (SQLite/Room/Drift, Realm, or a key-value store) and
-  wrap it behind a repository interface. Record the choice in an ADR.
-- Keep persisted models **separate** from domain entities; map between them.
+The accepted PantryPal MVP does **not** use a local product database, offline cache, offline write queue, or synchronization. The REST API and PostgreSQL database are the source of truth. This is intentional online-only behavior recorded in ADR-002, not an incomplete selection between SQLite, Realm, or another local store.
+
+A failed request must remain visible as a recoverable error; the client must not present stale cached inventory or claim that an offline mutation succeeded.
+
+## Future scope only
+
+If offline access becomes an approved future requirement, first record a new scope/security decision and choose one local store behind the existing repository boundary. Keep persisted models separate from domain entities and map between them. The schema naming, migration, and transaction guidance below applies only if such a store is approved.
 
 ## Naming
 

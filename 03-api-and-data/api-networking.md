@@ -1,33 +1,55 @@
 # API / Networking
 
-## Client
+## Client boundary
 
-- **One** configured HTTP client in `core/network/` — base URL, timeouts, and interceptors
-  defined once. No ad hoc clients per feature.
-- Set **timeouts** on every request (connect + read). No unbounded calls.
+PantryPal uses one configured Angular `HttpClient` setup with the API base URL, timeout policy, request metadata, and common error mapping. Feature pages must not instantiate or call `HttpClient` directly; they use the pantry feature facade/use cases and the repository boundary.
 
-## Requests & retries
+The client configuration and active interceptors are registered in one place. For the no-auth MVP, they cover:
+- request metadata/correlation where available;
+- bounded request timeout behavior;
+- mapping low-level HTTP/network failures into stable application errors.
 
-- **Retries** only on idempotent requests (GET), with exponential backoff and a max cap.
-- Never auto-retry a non-idempotent request (POST/PATCH) — surface the error to the user.
-- Attach correlation/request IDs via an interceptor for traceability.
+An Authorization/token interceptor is deliberately not active because the accepted MVP has no login, identity, or token. Do not fabricate token handling for an API that does not issue tokens. If authentication is explicitly added in a future scope, it must use a centralized interceptor chain and secure token storage, not per-page headers.
 
-## Serialization
+## Requests, errors, and retries
 
-- Serialize/deserialize through **DTOs**; map DTO → domain entity in the data layer.
-- The UI never sees a raw API payload.
-- Fail loudly on unexpected/malformed payloads — map to a domain error, do not guess.
+- Configure environment-specific API URLs. No credentials/secrets belong in the client bundle.
+- Retry idempotent GET requests only with a bounded policy and backoff where appropriate.
+- Do not automatically retry POST/PUT/DELETE: a timeout can leave the mutation outcome uncertain.
+- A network/timeout failure is an explicit error, never an empty pantry or successful mutation.
+- Preserve entered form values after validation/API failures where feasible; success feedback is shown only after server confirmation.
+- Convert HTTP/network/parsing failures into application/domain-facing errors before they reach a page; UI messages must include a sensible recovery action.
 
-## Status handling
+## DTOs and mapping
 
-| Range | Meaning | App behavior |
-|-------|---------|--------------|
-| 2xx | Success | Map to domain model |
-| 401 | Unauthenticated | Trigger token refresh; on failure, sign out |
-| 4xx | Client/validation error | Map to a domain error, show actionable message |
-| 5xx / timeout | Transient | Backoff + retry (idempotent), then surface error |
+- DTOs mirror the agreed API JSON contract. A mapper converts DTOs to the domain entity and rejects malformed or unexpected payloads instead of guessing.
+- The UI must not depend on raw payload shapes.
+- `expirationDate` is a date-only `YYYY-MM-DD` value or null; do not convert it to midnight UTC.
+- The mobile app connects to the REST API, never directly to PostgreSQL.
+
+## Error mapping
+
+| Condition | Client behavior |
+|---|---|
+| 2xx | Map the response; only then display mutation success |
+| 400 | Map validation/field errors; preserve the form |
+| 404 | Show product-not-found feedback and a route back to the pantry |
+| 5xx / timeout | Show a service error with a safe retry option where appropriate |
+| Network unavailable | Show connection error/retry and do not claim the pantry is empty |
+
+## Authentication expansion — not MVP behavior
+
+If a future accepted decision introduces authentication, require:
+- a dedicated secure-storage adapter backed by platform secure storage (not `localStorage` or plain Capacitor Preferences for credentials);
+- a centralized auth interceptor;
+- serialized/single-flight refresh when concurrent requests receive 401;
+- at most one retry of the original request after successful refresh;
+- clearing credentials and private cache on logout/refresh failure;
+- tests for concurrent 401s, refresh failure, and no infinite retry loops.
+
+These are future security requirements; the current no-auth MVP has no token refresh path to run or claim as tested.
 
 ## Logging
 
-- Never log tokens, credentials, or full auth headers.
-- Redact PII in request/response logs.
+- Never log passwords, tokens, full authorization headers, or sensitive payloads.
+- Do not log unnecessary product data; use concise diagnostics appropriate to a controlled academic demonstration.

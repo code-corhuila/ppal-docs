@@ -18,6 +18,7 @@ by one team. These rules are enforced in review and by the linter.
 | [design-system.md](./design-system.md) | Tokens, components, theming |
 | [accessibility.md](./accessibility.md) | WCAG-aligned mobile accessibility rules |
 | [i18n.md](./i18n.md) | Localization and RTL rules |
+| [prototype-state-spec.md](./prototype-state-spec.md) | PantryPal Figma states, transitions, scope tags, and Activity 1 capture checklist |
 | [_template-component.md](./_template-component.md) | Template to document a shared UI component |
 
 ---

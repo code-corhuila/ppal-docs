@@ -160,3 +160,77 @@ All changes are isolated in review branches and none have been merged to protect
 | ppal-docs | docs/h3-deployment-plan | https://github.com/code-corhuila/ppal-docs/pull/2 | Activity 3 deployment and evidence record |
 
 GitHub Actions runs were created for the app/API PRs, but the observed jobs had no assigned runner and exposed no executed steps. They are not passing evidence. Local Windows verification remains mandatory before these drafts should be marked ready for review.
+
+
+---
+
+## Verification update and course-rubric traceability — 2026-11-02
+
+This addendum supersedes older baseline counts in this record where newer local evidence is listed below. All results are from the developer's Windows workstation and Android emulator; they are not GitHub Actions results.
+
+### Latest mobile test and coverage evidence
+
+| Check | Latest observed result | Interpretation |
+|---|---|---|
+| Current runtime source baseline | App runtime on `develop` commit `1938f34`; test/coverage changes are isolated in PR #19 and do not modify runtime features | The debug APK below is a debug artifact from the baseline runtime revision; it is not a signed release build from the coverage branch |
+| Mobile unit tests with coverage | 41 passed across 7 files | Local execution completed successfully |
+| Domain layer coverage | 100% statements, 90.76% branches, 100% functions, 100% lines | Exceeds 80% for each listed metric except branch coverage is also above 80% |
+| Pantry presentation/ViewModel coverage | 100% statements, branches, functions, and lines | Exceeds the scoped coverage target for the facade/ViewModel |
+| Whole-app coverage | 55.29% statements, 82.69% branches, 58.33% functions, 63.36% lines | The whole-app result is below 80%; HomePage HTML/TypeScript is the main uncovered area. Do not describe the whole app as having 80% coverage. |
+| Mobile lint | `npm run lint`: “All files pass linting.” | Passed locally |
+| Web build | `npm run build`: application bundle generation complete; initial total 972.80 kB (191.09 kB estimated transfer) | Passed locally |
+| Capacitor debug sync | `npm run build:android:debug` completed web bundle generation and sync; four Capacitor plugins were listed | Passed locally |
+| Android debug build | Gradle `assembleDebug`: `BUILD SUCCESSFUL in 20s`; 213 actionable tasks, 159 executed and 54 up-to-date | Passed locally; output is a debug build |
+| Debug APK | `android/app/build/outputs/apk/debug/app-debug.apk`; 6,031,866 bytes | Installed successfully on the Pixel 10 Pro AVD, Android emulator device `emulator-5554` |
+| APK SHA-256 | `4DE28B04815C9ED90B96ECA3901FEEFF55DCE2E65414A1D9AD60EB190AC366B3` | Identifies the local debug APK copied to the evidence folder |
+| Manual CRUD | A demo product was created, updated from quantity 2 to 3, and deleted; the four seeded products remained | Demonstrated in user-provided emulator screenshots |
+| API outage/recovery | API was stopped while PostgreSQL stayed healthy; the app showed its connection-error/Retry state. API was restarted, `/health` returned `{"status":"ok"}`, and the four products reloaded | Demonstrated in user-provided emulator screenshots and terminal output |
+| Coverage dependency | `@vitest/coverage-v8@4.1.12` added to package devDependencies on `chore/add-vitest-coverage-provider` | Open PR #19; not yet merged into `develop` |
+| Latest app PR/merge status | Coverage tests and provider are proposed by [ppal-app PR #19](https://github.com/code-corhuila/ppal-app/pull/19) | Open review PR; do not claim the changes are merged until GitHub reports a merge |
+| Dependency audit | Current mobile dependency install reports 25 findings: 1 low, 23 moderate, 1 high | Open security-maintenance item; do not use `npm audit fix --force` without reviewing breaking impacts |
+
+### What the debug APK will and will not do on a physical phone
+
+The Android debug APK proves that the mobile client can be packaged, installed, and opened. It does not contain the REST API or PostgreSQL database. This is an intentional separation of responsibilities: the mobile client communicates with the API, and only the API accesses PostgreSQL.
+
+The local emulator configuration uses the development URL `http://10.0.2.2:3000/api`. The address `10.0.2.2` is the Android emulator's special alias for the host computer; it is not a general host address on a physical phone. In addition, Docker Compose binds the API host port to `127.0.0.1:3000`, so another device cannot reach that service over the LAN. Consequently, the current debug APK can open on a real phone but its product requests are not expected to work from that phone using the current backend configuration. It should show the API failure/retry state instead.
+
+This is not because the database must be installed inside the phone. The required API and database must be running at a network address reachable by the phone. To make a physical-device demonstration work, either deploy the API/database in a controlled environment and configure a real HTTPS API origin, or intentionally configure a secured LAN-only test endpoint and appropriate network binding for a temporary test. The first option is safer and more representative of a production architecture. Neither a public API deployment nor a real production HTTPS endpoint exists at the time of this addendum. The configured production URL remains the reserved placeholder `https://api.pantrypal.invalid/api`; do not present it as deployable.
+
+### H3 checklist: satisfied criteria and explicit gaps
+
+| Checklist item from the instructor's class slides | Evidence / rationale | Status |
+|---|---|---|
+| Ionic, Angular, and Capacitor running on Android | Debug APK built, installed, and executed on the Android emulator | Demonstrated |
+| Presentation, domain, and data layers by feature | Feature-first implementation with domain validation/date rules, repository contract/HTTP mapper, and presentation facade | Implemented |
+| State-pattern ADR and at least three states | ADR-001 documents the state approach; loading, loaded, and error states are present; the API outage/recovery test was demonstrated | Implemented and demonstrated |
+| Central route registry and guard | ADR-003 documents route table, edit resolver, and unsaved-change guard. No auth guard is required because there are no account/protected routes in this MVP. | Implemented with scope rationale |
+| HTTP client, interceptors, token refresh | Configured HTTP client/error handling and bounded read retry exist. There are no access/refresh tokens because login/accounts are excluded. Therefore the “refresh fails → one retry → return to login” behavior is not applicable to this release and is not claimed as implemented. If authentication enters scope, it needs a new approved ADR and tests. | Partially applicable; token flow not implemented |
+| Read cache demonstrated in airplane mode | The app does not cache pantry products for offline reads. This is intentionally online-only under ADR-002 and the app shows a recoverable error without inventing an empty pantry. The checklist may still count this criterion as unmet. | Not implemented; explicit rubric gap |
+| Two native plugins behind ports, with permission flow | Haptics and Status Bar are behind ports/adapters. These plugins do not request runtime camera/location/notification permissions, so they cannot demonstrate JIT permission denial. A strict reading of the instructor's permission-sensitive-plugin criterion remains unmet. | Ports/adapters implemented; permission-sensitive criterion unmet |
+| Green tests, signed APK/AAB, checklist | 41 tests passed; scoped domain and presentation coverage exceeded 80%; debug APK built/installed. No release keystore, signed release APK/AAB, signature verification, cloud deployment, store upload, or IPA currently exists. | Tests/build demonstrated; signed release/distribution still pending |
+
+The instructor's class slides state that an item that cannot be verified in the repository, app, or video should not be claimed as fulfilled. Keep the two rubrics gaps (airplane-mode cache and permission-sensitive plugins) visible. Do not silently change ADR-002 to imply these features exist. If the instructor accepts the current scope rationale, retain the explicit deviation; if they require both features as mandatory, obtain approval for an ADR amendment and implement/test them as a bounded, separately reviewed change.
+
+### Repository licensing
+
+The `ppal-docs` default branch already contained an MIT License. At the time of this update, the other six repositories did not have a root `LICENSE` on their default `develop` branch. License-only pull requests were opened to add the same MIT text from `ppal-docs`:
+
+- [ppal-api PR #6](https://github.com/code-corhuila/ppal-api/pull/6)
+- [ppal-app PR #20](https://github.com/code-corhuila/ppal-app/pull/20)
+- [ppal-db PR #5](https://github.com/code-corhuila/ppal-db/pull/5)
+- [ppal-infra PR #5](https://github.com/code-corhuila/ppal-infra/pull/5)
+- [ppal-portal PR #4](https://github.com/code-corhuila/ppal-portal/pull/4)
+- [ppal-tools PR #4](https://github.com/code-corhuila/ppal-tools/pull/4)
+
+These PRs are open and mergeable, not yet merged. The copyright line has been copied from `ppal-docs/LICENSE`; confirm that the named copyright holder is appropriate for the contributions in each repository before merging. After the license is reviewed into `develop`, promote it to `qa` and `main` through the usual protected-branch process.
+
+### ADR review and improvement plan
+
+ADR-002 has been extended with an H3 criterion-to-evidence table. Its structure is intentional: context and constraints explain why the problem matters, the decision states the scope, alternatives show what was rejected, justification explains the trade-offs, and consequences/reconsideration criteria show when the choice should change. For oral defense, be prepared to explain not only what was chosen but also what a rejected option would cost and what evidence would trigger reopening the decision.
+
+Recommended future ADR quality improvements:
+1. Link Must stories to acceptance criteria, source locations, tests, and runtime evidence.
+2. Keep implementation evidence separate from the original accepted decision; update dated implementation notes rather than rewriting history.
+3. Treat the no-offline-cache and permission-sensitive-plugin checklist items as explicit grading gaps until accepted by the instructor or addressed through an approved scope amendment.
+4. Record why token refresh is not applicable while no authentication/token model exists.

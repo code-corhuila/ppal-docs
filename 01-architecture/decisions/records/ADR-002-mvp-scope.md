@@ -143,3 +143,36 @@ This keeps future enhancements possible while preventing unplanned scope growth 
 - [Activity 1 requirements published in the course platform].
 - Instructor feedback and scope guidance for PantryPal, October 2026.
 - Related to: [ADR-001 — State management pattern](./ADR-001-state-management-pattern.md).
+
+
+---
+
+## H3 rubric alignment and explicit deviations — 2026-11-02
+
+The in-class H3 self-assessment checklist is used here as a traceability aid, not as proof by itself. A criterion is considered implemented only when the repository, an executed test, a built artifact, or a runtime recording provides evidence.
+
+| H3 criterion shown in class | Current evidence and decision | Status |
+|---|---|---|
+| Ionic, Angular, and Capacitor running on Android | The application was built with Capacitor/Gradle, installed, and opened on the Pixel 10 Pro Android emulator. | Implemented and locally demonstrated |
+| Presentation, domain, and data layers | The feature-first mobile structure separates presentation/facade, domain rules and repository contracts, and HTTP/data adapters. | Implemented |
+| State-management ADR and at least three visible states | ADR-001 records the state pattern. Runtime includes loading, loaded, and API-error states; the error/retry behavior was demonstrated with the API stopped and restarted. | Implemented and demonstrated |
+| Central route table with a guard | ADR-003 records centralized routing, the edit-product resolver, and a CanDeactivate unsaved-changes guard. There is no authentication guard because this MVP has no protected/account routes. | Implemented; no authentication guard by scope |
+| HTTP client, interceptors, safe token refresh | The app uses a configured Angular HttpClient and bounded read retry/error handling. There are no accounts, access tokens, or refresh tokens in the accepted MVP, so a refresh-failure/logout flow is not a current behavior and must not be claimed as implemented. If authentication is approved later, token refresh and a single controlled retry must be designed and tested as a separate security change. | HTTP/error handling implemented; token refresh not applicable to current scope |
+| Read cache demonstrated in airplane mode | No offline read cache or airplane-mode data display has been implemented. The accepted MVP is online-only; an API failure is intentionally presented as a recoverable error instead of returning stale or fabricated pantry data. This is a real deviation from the checklist if the instructor treats offline read cache as mandatory. | Not implemented; explicit scope deviation |
+| Two native plugins behind ports, including permission handling | Haptics and Status Bar are behind TypeScript ports/Capacitor adapters, with test doubles. Neither selected plugin requests runtime camera/location/notification permissions, so a just-in-time permission-denial flow cannot be demonstrated with these plugins. | Ports/adapters implemented; permission-sensitive plugin criterion remains unmet under a strict interpretation |
+| Green tests, signed APK/AAB, and release checklist | The latest local coverage run passed 41 tests across seven files. Domain reached 100% statements/functions/lines and 90.76% branches; presentation/ViewModel reached 100% across reported metrics. Whole-app coverage is 55.29% statements, 82.69% branches, 58.33% functions, and 63.36% lines because HomePage UI coverage remains low. A debug APK is built and installed; a signed release APK/AAB has not yet been created or verified. | Tests and scoped coverage demonstrated; signed release artifact pending |
+
+### Why these deviations are recorded instead of being hidden
+
+ADR-002 deliberately narrowed the product to one controlled demonstration pantry with online-only CRUD and no accounts. That decision avoids pretending that an unauthenticated shared pantry is a secure multi-user product and keeps the first vertical slice testable across mobile client, REST API, and PostgreSQL. It also means token refresh and a login redirect do not apply to the current implementation.
+
+The H3 checklist includes some broader production-readiness examples. The no-offline-cache decision and the absence of permission-sensitive plugins are therefore documented as rubric gaps, not described as completed features. If either criterion is mandatory for grading, the acceptable next step is an instructor-approved ADR amendment plus a bounded implementation and negative-path tests. Do not add a camera/location/notification permission just to satisfy a visual checklist without defining user value, privacy impact, data handling, denial behavior, and testing first.
+
+### Decision quality and possible improvements
+
+The structure of this ADR follows a decision-record pattern: context and constraints explain the problem, the decision fixes a specific scope, alternatives show what was rejected, justification explains trade-offs, and consequences/safety boundaries state what the choice enables and what it prevents. To improve a future revision, keep these items synchronized and traceable:
+
+1. Link each Must story to its acceptance criteria, source path, test file, and runtime evidence.
+2. Record a dated amendment rather than silently changing an accepted scope decision.
+3. Distinguish product-scope choices from course-rubric deviations and infrastructure limitations.
+4. Revisit the decision only when instructor feedback or new evidence changes its assumptions; record the owner and approval of that change.

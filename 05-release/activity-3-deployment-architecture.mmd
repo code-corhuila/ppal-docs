@@ -1,5 +1,5 @@
 flowchart TB
-  subgraph Repo["GitHub source repositories"]
+  subgraph Source["GitHub source repositories"]
     AppRepo["ppal-app - Ionic, Angular, Capacitor"]
     ApiRepo["ppal-api - Node.js, Express, TypeScript"]
     DbRepo["ppal-db - PostgreSQL migration and seed"]
@@ -7,8 +7,8 @@ flowchart TB
     DocsRepo["ppal-docs - ADRs and release evidence"]
   end
 
-  subgraph Workstation["Developer workstation - controlled local demo"]
-    Android["Android emulator - Pixel 10 Pro, Android 16 API 36.1"]
+  subgraph Local["Verified local demonstration - Windows workstation"]
+    Emulator["Android emulator - Pixel 10 Pro, Android 16 API 36.1"]
     NativeUi["Haptics / Status Bar via ports and Capacitor adapters"]
     WebBuild["Angular development build - www"]
     NativeBuild["Capacitor sync and Gradle - debug APK"]
@@ -19,18 +19,35 @@ flowchart TB
 
   AppRepo --> WebBuild
   WebBuild --> NativeBuild
-  NativeBuild --> Android
-  Android --> NativeUi
+  NativeBuild --> Emulator
+  Emulator --> NativeUi
   InfraRepo --> Compose
   ApiRepo --> Compose
   DbRepo --> Compose
   Compose --> Api
   Compose --> Db
   Api --> Db
-  Android -->|HTTP via 10.0.2.2:3000 in debug only| Api
+  Emulator -->|"HTTP via 10.0.2.2:3000 in debug only"| Api
   DocsRepo -. contracts and evidence .-> AppRepo
 
-  ReleaseGap["Release gaps: production API URL is a reserved placeholder; no signed release artifact or public deployment is claimed."]
-  Boundary["Security boundary: no authentication in the accepted MVP. Local or controlled demo only; no public multi-user API or database exposure."]
+  subgraph Proposed["Proposed production architecture - NOT deployed"]
+    Device["Physical Android / iOS device"]
+    Store["Google Play internal track / App Store distribution"]
+    Https["HTTPS endpoint and TLS termination"]
+    Runtime["Hosted API runtime - provider not selected or provisioned"]
+    ManagedDb[("Managed PostgreSQL - private network, not provisioned")]
+    AndroidRelease["Signed Android AAB/APK - not generated yet"]
+    IosRelease["Signed iOS IPA via macOS/Xcode - not generated"]
+    Device -->|"HTTPS API requests"| Https
+    Https --> Runtime
+    Runtime --> ManagedDb
+    AndroidRelease -. proposed upload .-> Store
+    IosRelease -. proposed upload .-> Store
+    Store -. installation .-> Device
+  end
+
+  ReleaseGap["Open release gates: production URL is api.pantrypal.invalid; no release keystore, signed release artifacts, hosted API/database, or store upload are evidenced."]
+  Boundary["Security boundary: no authentication or per-user isolation in accepted MVP. Do not expose as a public multi-user service."]
   Api -.-> Boundary
-  Android -.-> ReleaseGap
+  Emulator -.-> ReleaseGap
+  Proposed -. "future path only" .-> ReleaseGap

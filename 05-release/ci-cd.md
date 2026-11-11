@@ -1,5 +1,7 @@
 # CI/CD
 
+> Status note (2026-10-30): this document describes target release principles, not a fully implemented store-release pipeline. The current review branches contain Mobile CI and API CI workflow files. GitHub Actions jobs are blocked before their steps start because GitHub reports the account locked due to a billing issue. No release workflow, signed store artifact, or cloud deployment is claimed.
+
 ## Principles
 
 - Reproducible builds **from CI only** — no store uploads from a developer laptop.
@@ -19,8 +21,7 @@
 
 - PRs run stages 1–2.
 - Merges to `main` run stages 1–4 to internal testers.
-- A `vX.Y.Z` tag runs the full pipeline and creates the GitHub release
-  (`.github/workflows/release.yml`).
+- Target future behavior only: a `vX.Y.Z` tag could run a full release pipeline and create a GitHub release. A `.github/workflows/release.yml` file is not present on the current review branch, so this automation is not currently configured.
 
 ## Environments
 
